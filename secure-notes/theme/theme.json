@@ -1,0 +1,14 @@
+{
+  "id": "app_theme",
+  "name": "secure-notes Secure Notes Theme",
+  "parent": "default_theme",
+  "tokens": {
+    "colors": {
+      "light": {
+        "surface": "#f8f9f7",
+        "primary": "#007580",
+        "primary.dark": "#005760"
+      }
+    }
+  }
+}

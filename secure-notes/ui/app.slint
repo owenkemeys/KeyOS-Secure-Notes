@@ -1,0 +1,3337 @@
+import { Theme, ButtonStyleProps, ButtonSizeProps, ButtonVariant, ButtonState, ButtonSize } from "@ui/theme.slint";
+import { UISize } from "@ui/theme.slint";
+import { Button } from "@ui/button.slint";
+import { Dropdown } from "@ui/dropdown.slint";
+
+export { Theme, ButtonStyleProps, ButtonSizeProps, ButtonVariant, ButtonState, ButtonSize }
+
+export struct NoteListItem {
+    id: int,
+    title: string,
+    subtitle: string,
+    pin-required: bool,
+}
+
+export struct CustomFieldListItem {
+    index: int,
+    label: string,
+    value: string,
+    kind: string,
+}
+
+export struct ImportReviewListItem {
+    source-index: int,
+    title: string,
+    subtitle: string,
+    similar-to: string,
+    selected: bool,
+}
+
+export struct ImportResultListItem {
+    title: string,
+    subtitle: string,
+    status: string,
+}
+
+component GlyphButton inherits Rectangle {
+    in property <string> glyph;
+    in property <brush> glyph-color: Theme.palette-foreground;
+    callback clicked();
+
+    width: 52px;
+    height: 52px;
+    border-radius: 26px;
+    background: root.glyph == "" ? transparent : (touch.pressed ? Theme.palette-secondary : transparent);
+
+    if root.glyph != "x" && root.glyph != "back" && root.glyph != "down" && root.glyph != "ellipsis": Text {
+        width: 100%;
+        height: 100%;
+        text: root.glyph;
+        color: root.glyph-color;
+        font-family: "Montserrat";
+        font-size: 34px;
+        font-weight: 500;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+
+    if root.glyph == "x": Image {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+        width: 24px;
+        height: 24px;
+        source: @image-url("../resources/icons/clear-x.svg");
+        colorize: root.glyph-color;
+        image-fit: contain;
+    }
+
+    if root.glyph == "back": Image {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+        width: 24px;
+        height: 24px;
+        source: @image-url("../resources/icons/back.svg");
+        colorize: root.glyph-color;
+        image-fit: contain;
+    }
+
+    if root.glyph == "down": Image {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+        width: 24px;
+        height: 24px;
+        source: @image-url("../resources/icons/chevron-down.svg");
+        colorize: root.glyph-color;
+        image-fit: contain;
+    }
+
+    if root.glyph == "ellipsis": Image {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+        width: 24px;
+        height: 24px;
+        source: @image-url("../resources/icons/ellipsis.svg");
+        colorize: root.glyph-color;
+        image-fit: contain;
+    }
+
+    touch := TouchArea {
+        width: parent.width;
+        height: parent.height;
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+component ActionButton inherits Rectangle {
+    in property <string> text;
+    in property <brush> fill: Theme.palette-primary;
+    in property <brush> foreground: white;
+    callback clicked();
+
+    height: 60px;
+    border-radius: 24px;
+    background: touch.pressed ? root.fill.darker(12%) : root.fill;
+    border-width: 1px;
+    border-color: root.fill.darker(12%);
+    clip: true;
+
+    Text {
+        width: 100%;
+        height: 100%;
+        text: root.text;
+        color: root.foreground;
+        font-family: "Montserrat";
+        font-size: 24px;
+        font-weight: 700;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+
+    touch := TouchArea {
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+component FieldEditButton inherits Rectangle {
+    callback clicked();
+
+    width: 40px;
+    height: 40px;
+    border-radius: 16px;
+    background: touch.pressed ? Theme.palette-secondary.darker(8%) : transparent;
+
+    Image {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+        width: 24px;
+        height: 24px;
+        source: @image-url("../resources/icons/edit-pencil.svg");
+        image-fit: contain;
+        colorize: Theme.palette-primary;
+    }
+
+    touch := TouchArea {
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+component PlainLink inherits Rectangle {
+    in property <string> text;
+    in property <string> icon: "";
+    in property <length> icon-group-width: 138px;
+    in property <length> icon-text-width: 108px;
+    callback clicked();
+
+    height: 54px;
+    background: touch.pressed ? Theme.palette-surface : transparent;
+
+    if root.icon == "": Text {
+        width: 100%;
+        height: 100%;
+        text: root.text;
+        color: Theme.palette-primary;
+        font-family: "Montserrat";
+        font-size: 22px;
+        font-weight: 700;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+
+    if root.icon == "plus": Rectangle {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+
+        Image {
+            x: (parent.width - root.icon-group-width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 24px;
+            height: 24px;
+            source: @image-url("../resources/icons/plus.svg");
+            colorize: Theme.palette-primary;
+            image-fit: contain;
+        }
+
+        Text {
+            x: (parent.width - root.icon-group-width) / 2 + 30px;
+            y: 0px;
+            width: root.icon-text-width;
+            height: 100%;
+            text: root.text;
+            color: Theme.palette-primary;
+            font-family: "Montserrat";
+            font-size: 22px;
+            font-weight: 700;
+            horizontal-alignment: left;
+            vertical-alignment: center;
+        }
+    }
+
+    touch := TouchArea {
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+component SectionLabel inherits Rectangle {
+    in property <string> label;
+    callback clicked();
+
+    height: 22px;
+    background: transparent;
+
+    Text {
+        x: 16px;
+        width: parent.width - 16px;
+        height: parent.height;
+        text: root.label;
+        color: Theme.palette-muted;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 600;
+        vertical-alignment: center;
+    }
+
+    TouchArea {
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+component PillInput inherits Rectangle {
+    in-out property <string> text;
+    in property <string> placeholder;
+    in property <bool> password: false;
+    in property <string> error: "";
+    out property <bool> has-focus: input.has-focus;
+    callback edited(string);
+    callback accepted();
+    callback focus-changed(bool);
+    forward-focus: input;
+
+    height: 56px;
+    border-radius: 24px;
+    background: Theme.palette-secondary;
+    border-width: input.has-focus || root.error != "" ? 2px : 0px;
+    border-color: root.error != "" ? #cf896f : Theme.palette-primary;
+    clip: true;
+
+    if root.text == "": Text {
+        x: 16px;
+        y: 0px;
+        width: parent.width - 32px;
+        height: parent.height;
+        text: root.placeholder;
+        color: root.error != "" ? #cf896f : Theme.palette-muted;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 500;
+        horizontal-alignment: left;
+        vertical-alignment: center;
+    }
+
+    input := TextInput {
+        x: 16px;
+        y: 13px;
+        width: parent.width - 32px;
+        height: 30px;
+        text <=> root.text;
+        color: root.error != "" ? #cf896f : Theme.palette-foreground;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 500;
+        input-type: root.password ? InputType.password : InputType.text;
+        single-line: true;
+        vertical-alignment: center;
+        text-cursor-width: 2px;
+        selection-background-color: Theme.palette-primary.with-alpha(0.28);
+        selection-foreground-color: Theme.palette-foreground;
+        edited => {
+            root.edited(self.text);
+        }
+        accepted => {
+            root.accepted();
+            self.clear-focus();
+        }
+    }
+
+    changed has-focus => {
+        root.focus-changed(root.has-focus);
+    }
+}
+
+component MultiLineInput inherits Rectangle {
+    in-out property <string> text;
+    in property <string> placeholder;
+    in property <length> field-height: 188px;
+    in property <string> error: "";
+    out property <bool> has-focus: input.has-focus;
+    callback edited(string);
+    callback accepted();
+    callback focus-changed(bool);
+    forward-focus: input;
+
+    height: root.field-height;
+    border-radius: 24px;
+    background: Theme.palette-secondary;
+    border-width: input.has-focus || root.error != "" ? 2px : 0px;
+    border-color: root.error != "" ? #cf896f : Theme.palette-primary;
+    clip: true;
+
+    if root.text == "": Text {
+        x: 16px;
+        y: 16px;
+        width: parent.width - 32px;
+        height: parent.height - 32px;
+        text: root.placeholder;
+        color: root.error != "" ? #cf896f : Theme.palette-muted;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 500;
+        wrap: word-wrap;
+        vertical-alignment: top;
+    }
+
+    input := TextInput {
+        x: 16px;
+        y: 14px;
+        width: parent.width - 32px;
+        height: parent.height - 32px;
+        text <=> root.text;
+        color: root.error != "" ? #cf896f : Theme.palette-foreground;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 500;
+        single-line: false;
+        wrap: word-wrap;
+        vertical-alignment: top;
+        text-cursor-width: 2px;
+        selection-background-color: Theme.palette-primary.with-alpha(0.28);
+        selection-foreground-color: Theme.palette-foreground;
+        key-pressed(event) => {
+            if (event.text == "\n") {
+                root.accepted();
+                self.clear-focus();
+                return accept;
+            }
+            return reject;
+        }
+        edited => {
+            root.edited(self.text);
+        }
+        accepted => {
+            root.accepted();
+            self.clear-focus();
+        }
+    }
+
+    changed has-focus => {
+        root.focus-changed(root.has-focus);
+    }
+}
+
+component SearchInput inherits Rectangle {
+    in-out property <string> text;
+    callback edited(string);
+    callback cleared();
+    forward-focus: input;
+
+    height: 56px;
+    border-radius: 24px;
+    background: Theme.palette-secondary;
+    clip: true;
+
+    Image {
+        x: 20px;
+        y: (parent.height - self.height) / 2;
+        width: 24px;
+        height: 24px;
+        source: @image-url("../resources/icons/search.svg");
+        colorize: Theme.palette-muted;
+        image-fit: contain;
+    }
+
+    if root.text == "": Text {
+        x: 56px;
+        width: parent.width - 78px;
+        height: parent.height;
+        text: "Search...";
+        color: Theme.palette-muted;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 500;
+        vertical-alignment: center;
+    }
+
+    input := TextInput {
+        x: 56px;
+        y: 14px;
+        width: parent.width - (root.text == "" ? 78px : 112px);
+        height: 28px;
+        text <=> root.text;
+        color: Theme.palette-foreground;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 500;
+        single-line: true;
+        vertical-alignment: center;
+        text-cursor-width: 2px;
+        selection-background-color: Theme.palette-primary.with-alpha(0.28);
+        selection-foreground-color: Theme.palette-foreground;
+        edited => {
+            root.edited(self.text);
+        }
+        accepted => {
+            self.clear-focus();
+        }
+    }
+
+    if root.text != "": GlyphButton {
+        x: parent.width - self.width - 2px;
+        y: 2px;
+        width: 52px;
+        height: 52px;
+        glyph: "x";
+        glyph-color: Theme.palette-muted;
+        clicked => {
+            root.text = "";
+            root.edited("");
+            root.cleared();
+        }
+    }
+}
+
+component FilterGlyph inherits Rectangle {
+    in property <brush> icon-color: Theme.palette-foreground;
+
+    width: 26px;
+    height: 26px;
+    background: transparent;
+
+    Rectangle {
+        x: 2px;
+        y: 6px;
+        width: 22px;
+        height: 2px;
+        border-radius: 1px;
+        background: root.icon-color;
+    }
+
+    Rectangle {
+        x: 2px;
+        y: 18px;
+        width: 22px;
+        height: 2px;
+        border-radius: 1px;
+        background: root.icon-color;
+    }
+
+    Rectangle {
+        x: 8px;
+        y: 2px;
+        width: 5px;
+        height: 10px;
+        border-radius: 2px;
+        background: root.icon-color;
+    }
+
+    Rectangle {
+        x: 15px;
+        y: 14px;
+        width: 5px;
+        height: 10px;
+        border-radius: 2px;
+        background: root.icon-color;
+    }
+}
+
+component FilterButton inherits Rectangle {
+    in property <bool> active;
+    in property <bool> open: false;
+    callback clicked();
+
+    width: 56px;
+    height: 56px;
+    border-radius: 24px;
+    background: root.active ? (touch.pressed ? Theme.palette-primary.darker(8%) : Theme.palette-primary) : (touch.pressed || root.open ? Theme.palette-secondary : transparent);
+
+    Image {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+        width: 24px;
+        height: 24px;
+        source: @image-url("../resources/icons/filter-sliders.svg");
+        colorize: root.active ? white : (root.open ? Theme.palette-primary : Theme.palette-foreground);
+        image-fit: contain;
+    }
+
+    touch := TouchArea {
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+component SelectButton inherits Rectangle {
+    in property <string> label;
+    in property <string> value;
+    callback clicked();
+
+    height: 56px;
+    border-radius: 0px;
+    background: touch.pressed ? Theme.palette-surface : Theme.palette-background;
+    border-width: 0px;
+    clip: true;
+
+    Text {
+        x: 16px;
+        y: 0px;
+        width: parent.width - 214px;
+        height: parent.height;
+        text: root.label;
+        color: Theme.palette-foreground;
+        font-family: "Montserrat";
+        font-size: 22px;
+        font-weight: 500;
+        vertical-alignment: center;
+        overflow: elide;
+    }
+
+    Text {
+        x: parent.width - 198px;
+        y: 0px;
+        width: 150px;
+        height: parent.height;
+        text: root.value;
+        color: Theme.palette-muted;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 500;
+        horizontal-alignment: right;
+        vertical-alignment: center;
+        overflow: elide;
+    }
+
+    Image {
+        x: parent.width - self.width - 16px;
+        y: (parent.height - self.height) / 2;
+        width: 24px;
+        height: 24px;
+        source: @image-url("../resources/icons/chevron-down.svg");
+        colorize: Theme.palette-foreground;
+        image-fit: contain;
+    }
+
+    touch := TouchArea {
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+component LockGlyph inherits Rectangle {
+    in property <brush> icon-color: Theme.palette-muted;
+
+    width: 22px;
+    height: 22px;
+    background: transparent;
+
+    Rectangle {
+        x: 5px;
+        y: 9px;
+        width: 12px;
+        height: 10px;
+        border-radius: 2px;
+        border-width: 2px;
+        border-color: root.icon-color;
+        background: transparent;
+    }
+
+    Rectangle {
+        x: 7px;
+        y: 4px;
+        width: 8px;
+        height: 9px;
+        border-radius: 4px;
+        border-width: 2px;
+        border-color: root.icon-color;
+        background: transparent;
+    }
+
+    Rectangle {
+        x: 5px;
+        y: 11px;
+        width: 12px;
+        height: 3px;
+        background: Theme.palette-surface;
+    }
+}
+
+component DocumentGlyph inherits Rectangle {
+    in property <brush> icon-color: white;
+
+    width: 26px;
+    height: 26px;
+    background: transparent;
+
+    Rectangle {
+        x: 5px;
+        y: 3px;
+        width: 16px;
+        height: 20px;
+        border-radius: 3px;
+        border-width: 2px;
+        border-color: root.icon-color;
+        background: transparent;
+    }
+
+    Rectangle {
+        x: 9px;
+        y: 9px;
+        width: 8px;
+        height: 2px;
+        border-radius: 1px;
+        background: root.icon-color;
+    }
+
+    Rectangle {
+        x: 9px;
+        y: 15px;
+        width: 8px;
+        height: 2px;
+        border-radius: 1px;
+        background: root.icon-color;
+    }
+}
+
+component ImportHeroIcon inherits Rectangle {
+    width: 184px;
+    height: 184px;
+    background: transparent;
+
+    Rectangle {
+        x: 5px;
+        y: 5px;
+        width: 174px;
+        height: 174px;
+        border-radius: 87px;
+        border-width: 10px;
+        border-color: Theme.palette-foreground.with-alpha(0.78);
+        background: transparent;
+    }
+
+    Image {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+        width: 72px;
+        height: 72px;
+        source: @image-url("../resources/icons/import-hero.svg");
+        image-fit: contain;
+    }
+}
+
+component NoteRow inherits Rectangle {
+    in property <int> item-id;
+    in property <string> title;
+    in property <string> subtitle;
+    in property <bool> pin-required;
+    callback clicked(int);
+
+    height: 78px;
+    border-radius: 14px;
+    background: touch.pressed ? Theme.palette-secondary : Theme.palette-surface;
+    border-width: 1px;
+    border-color: Theme.palette-border;
+    clip: true;
+
+    Rectangle {
+        x: 16px;
+        y: (parent.height - self.height) / 2;
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        background: Theme.palette-secondary;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+
+        Image {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 24px;
+            height: 24px;
+            source: root.subtitle == "Login" ? @image-url("../resources/icons/item-login.svg") : (root.subtitle == "Payment Card" ? @image-url("../resources/icons/item-payment-card.svg") : (root.subtitle == "Identity" ? @image-url("../resources/icons/item-identity.svg") : (root.subtitle == "SSH Key" ? @image-url("../resources/icons/item-ssh-key.svg") : @image-url("../resources/icons/item-secure-note.svg"))));
+            image-fit: contain;
+        }
+    }
+
+    VerticalLayout {
+        x: 82px;
+        y: 16px;
+        width: parent.width - (root.pin-required ? 164px : 132px);
+        height: parent.height - 28px;
+        spacing: 2px;
+
+        Text {
+            text: root.title;
+            color: Theme.palette-foreground;
+            font-family: "Montserrat";
+            font-size: 20px;
+            font-weight: 700;
+            overflow: elide;
+        }
+
+        Text {
+            text: root.subtitle;
+            color: Theme.palette-muted;
+            font-family: "Montserrat";
+            font-size: 15px;
+            font-weight: 500;
+            overflow: elide;
+        }
+    }
+
+    if root.pin-required: Rectangle {
+        x: parent.width - 76px;
+        y: (parent.height - self.height) / 2;
+        width: 36px;
+        height: 36px;
+        background: transparent;
+
+        Image {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 24px;
+            height: 24px;
+            source: @image-url("../resources/icons/pin-required.svg");
+            image-fit: contain;
+            opacity: 0.45;
+        }
+    }
+
+    Image {
+        x: parent.width - self.width - 12px;
+        y: (parent.height - self.height) / 2;
+        width: 24px;
+        height: 24px;
+        source: @image-url("../resources/icons/chevron-right.svg");
+        colorize: Theme.palette-muted;
+        image-fit: contain;
+    }
+
+    touch := TouchArea {
+        clicked => {
+            root.clicked(root.item-id);
+        }
+    }
+}
+
+component ToggleRow inherits Rectangle {
+    in-out property <bool> checked;
+    in property <string> label: "Require PIN to view";
+
+    height: 58px;
+    border-radius: 12px;
+    background: Theme.palette-surface;
+    border-width: 1px;
+    border-color: Theme.palette-border;
+
+    Text {
+        x: 14px;
+        y: 0px;
+        width: parent.width - 92px;
+        height: parent.height;
+        text: root.label;
+        color: Theme.palette-foreground;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 700;
+        vertical-alignment: center;
+        overflow: elide;
+    }
+
+    Rectangle {
+        x: parent.width - self.width - 12px;
+        y: (parent.height - self.height) / 2;
+        width: 58px;
+        height: 34px;
+        border-radius: 17px;
+        background: root.checked ? Theme.palette-primary : Theme.palette-secondary;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+
+        Rectangle {
+            x: root.checked ? parent.width - self.width - 4px : 4px;
+            y: 4px;
+            width: 26px;
+            height: 26px;
+            border-radius: 13px;
+            background: white;
+        }
+    }
+
+    TouchArea {
+        clicked => {
+            root.checked = !root.checked;
+        }
+    }
+}
+
+component InlineToggle inherits Rectangle {
+    in-out property <bool> checked;
+    in property <bool> interactive: true;
+    callback toggled(bool);
+
+    width: 58px;
+    height: 34px;
+    border-radius: 17px;
+    background: root.checked ? Theme.palette-primary : Theme.palette-secondary;
+    border-width: 1px;
+    border-color: Theme.palette-border;
+
+    Rectangle {
+        x: root.checked ? parent.width - self.width - 4px : 4px;
+        y: 4px;
+        width: 26px;
+        height: 26px;
+        border-radius: 13px;
+        background: white;
+    }
+
+    if root.interactive: TouchArea {
+        clicked => {
+            root.checked = !root.checked;
+            root.toggled(root.checked);
+        }
+    }
+}
+
+component ErrorText inherits Text {
+    in property <string> message;
+
+    height: root.message == "" ? 0px : 26px;
+    text: root.message;
+    color: #cf896f;
+    font-family: "Montserrat";
+    font-size: 20px;
+    font-weight: 500;
+    vertical-alignment: center;
+    wrap: word-wrap;
+}
+
+component OldStarButton inherits Rectangle {
+    in-out property <bool> active;
+
+    width: 52px;
+    height: 52px;
+    border-radius: 26px;
+    background: transparent;
+
+    Text {
+        width: 100%;
+        height: 100%;
+        text: root.active ? "★" : "☆";
+        color: root.active ? Theme.palette-primary : Theme.palette-foreground;
+        font-family: "Montserrat";
+        font-size: 34px;
+        font-weight: 700;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+
+}
+
+component StarButton inherits Rectangle {
+    in-out property <bool> active;
+
+    width: 52px;
+    height: 52px;
+    border-radius: 26px;
+    background: transparent;
+
+    Image {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+        width: 22px;
+        height: 22px;
+        source: root.active ? @image-url("../resources/icons/favorite-star-filled.svg") : @image-url("../resources/icons/favorite-star-outline.svg");
+        colorize: root.active ? Theme.palette-primary : Theme.palette-foreground;
+        image-fit: contain;
+    }
+}
+
+component CustomFieldRow inherits Rectangle {
+    in property <int> field-index;
+    in property <string> label;
+    in-out property <string> value;
+    in property <string> kind;
+    callback changed(int, string);
+    callback edit-requested(int);
+    callback focus-changed(bool);
+
+    height: root.kind == "Boolean" ? 76px : 120px;
+    background: transparent;
+
+    if root.kind == "Boolean": HorizontalLayout {
+        width: 100%;
+        height: 68px;
+        spacing: 8px;
+
+        Rectangle {
+            horizontal-stretch: 1;
+            height: 68px;
+            border-radius: 14px;
+            background: Theme.palette-surface;
+            border-width: 1px;
+            border-color: Theme.palette-border;
+
+            InlineToggle {
+                x: 16px;
+                y: (parent.height - self.height) / 2;
+                checked: root.value == "true";
+                toggled(checked) => {
+                    root.value = checked ? "true" : "false";
+                    root.changed(root.field-index, root.value);
+                }
+            }
+
+            Text {
+                x: 84px;
+                y: 0px;
+                width: parent.width - 100px;
+                height: parent.height;
+                text: root.label;
+                color: Theme.palette-foreground;
+                font-family: "Montserrat";
+                font-size: 20px;
+                font-weight: 700;
+                vertical-alignment: center;
+                overflow: elide;
+            }
+        }
+
+        Rectangle {
+            width: 40px;
+            height: 68px;
+            background: transparent;
+
+            FieldEditButton {
+                y: (parent.height - self.height) / 2;
+                clicked => {
+                    root.edit-requested(root.field-index);
+                }
+            }
+        }
+    }
+
+    if root.kind != "Boolean": VerticalLayout {
+        width: 100%;
+        height: 112px;
+
+        HorizontalLayout {
+            width: 100%;
+            height: 112px;
+            spacing: 8px;
+
+            Rectangle {
+                horizontal-stretch: 1;
+                height: 112px;
+                border-radius: 14px;
+                background: Theme.palette-surface;
+                border-width: 1px;
+                border-color: Theme.palette-border;
+
+                Text {
+                    x: 16px;
+                    y: 12px;
+                    width: parent.width - 32px;
+                    height: 24px;
+                    text: root.label;
+                    color: Theme.palette-muted;
+                    font-family: "Montserrat";
+                    font-size: 18px;
+                    font-weight: 700;
+                    overflow: elide;
+                }
+
+                PillInput {
+                    x: 16px;
+                    y: 44px;
+                    width: parent.width - 32px;
+                    text <=> root.value;
+                    placeholder: root.kind == "Hidden" ? "Hidden value" : "Value";
+                    password: false;
+                    edited(text) => {
+                        root.changed(root.field-index, text);
+                    }
+                    accepted => {
+                        root.changed(root.field-index, self.text);
+                    }
+                    focus-changed(focused) => {
+                        root.focus-changed(focused);
+                    }
+                }
+            }
+
+            Rectangle {
+                width: 40px;
+                height: 112px;
+                background: transparent;
+
+                FieldEditButton {
+                    y: (parent.height - self.height) / 2;
+                    clicked => {
+                        root.edit-requested(root.field-index);
+                    }
+                }
+            }
+        }
+    }
+}
+
+component DetailTextBox inherits Rectangle {
+    in property <string> text;
+    in property <length> min-box-height: 96px;
+
+    height: max(root.min-box-height, body-text.preferred-height + 34px);
+    border-radius: 14px;
+    background: Theme.palette-surface;
+    border-width: 1px;
+    border-color: Theme.palette-border;
+
+    body-text := Text {
+        x: 16px;
+        y: 16px;
+        width: parent.width - 32px;
+        text: root.text;
+        color: Theme.palette-foreground;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 500;
+        wrap: word-wrap;
+    }
+}
+
+component DetailFieldBox inherits Rectangle {
+    in property <string> label;
+    in property <string> value;
+    in property <string> kind;
+
+    height: root.kind == "Boolean" ? 68px : max(86px, value-text.preferred-height + 48px);
+    border-radius: 14px;
+    background: Theme.palette-surface;
+    border-width: 1px;
+    border-color: Theme.palette-border;
+
+    if root.kind == "Boolean": Text {
+        x: 16px;
+        y: 0px;
+        width: parent.width - 96px;
+        height: parent.height;
+        text: root.label;
+        color: Theme.palette-foreground;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 700;
+        vertical-alignment: center;
+        overflow: elide;
+    }
+
+    if root.kind == "Boolean": InlineToggle {
+        x: parent.width - self.width - 16px;
+        y: (parent.height - self.height) / 2;
+        checked: root.value == "true";
+        interactive: false;
+    }
+
+    Text {
+        x: 16px;
+        y: 10px;
+        width: parent.width - 32px;
+        height: 24px;
+        text: root.label;
+        color: Theme.palette-muted;
+        font-family: "Montserrat";
+        font-size: 18px;
+        font-weight: 700;
+        overflow: elide;
+        opacity: root.kind == "Boolean" ? 0 : 1;
+    }
+
+    value-text := Text {
+        x: 16px;
+        y: 38px;
+        width: parent.width - 32px;
+        text: root.kind == "Hidden" && root.value != "" ? "********" : (root.value == "" ? "No value" : root.value);
+        color: Theme.palette-foreground;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 600;
+        wrap: word-wrap;
+        opacity: root.kind == "Boolean" ? 0 : 1;
+    }
+}
+
+component ImportReviewRow inherits Rectangle {
+    in property <int> source-index;
+    in property <string> title;
+    in property <string> subtitle;
+    in property <string> similar-to;
+    in-out property <bool> selected;
+    callback toggled(int, bool);
+
+    height: root.similar-to == "" ? 78px : 96px;
+    border-radius: 14px;
+    background: Theme.palette-surface;
+    border-width: 1px;
+    border-color: root.similar-to == "" ? Theme.palette-border : #cf896f;
+    clip: true;
+
+    Rectangle {
+        x: 14px;
+        y: (parent.height - self.height) / 2;
+        width: 42px;
+        height: 42px;
+        border-radius: 21px;
+        background: Theme.palette-secondary;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+
+        Image {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 24px;
+            height: 24px;
+            source: root.subtitle == "Login" ? @image-url("../resources/icons/item-login.svg") : (root.subtitle == "Payment Card" ? @image-url("../resources/icons/item-payment-card.svg") : (root.subtitle == "Identity" ? @image-url("../resources/icons/item-identity.svg") : (root.subtitle == "SSH Key" ? @image-url("../resources/icons/item-ssh-key.svg") : @image-url("../resources/icons/item-secure-note.svg"))));
+            image-fit: contain;
+        }
+    }
+
+    VerticalLayout {
+        x: 70px;
+        y: root.similar-to == "" ? 14px : 12px;
+        width: parent.width - 142px;
+        height: parent.height - 22px;
+        spacing: 2px;
+
+        Text {
+            text: root.title;
+            color: Theme.palette-foreground;
+            font-family: "Montserrat";
+            font-size: 20px;
+            font-weight: 700;
+            overflow: elide;
+        }
+
+        Text {
+            text: root.subtitle;
+            color: Theme.palette-muted;
+            font-family: "Montserrat";
+            font-size: 16px;
+            font-weight: 600;
+            overflow: elide;
+        }
+
+        if root.similar-to != "": Text {
+            text: "Similar to: \"" + root.similar-to + "\"";
+            color: #cf896f;
+            font-family: "Montserrat";
+            font-size: 14px;
+            font-weight: 600;
+            overflow: elide;
+        }
+    }
+
+    Rectangle {
+        x: parent.width - self.width - 12px;
+        y: (parent.height - self.height) / 2;
+        width: 54px;
+        height: 32px;
+        border-radius: 16px;
+        background: root.selected ? Theme.palette-primary : Theme.palette-secondary;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+
+        Rectangle {
+            x: root.selected ? parent.width - self.width - 4px : 4px;
+            y: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            background: white;
+        }
+    }
+
+    TouchArea {
+        clicked => {
+            root.selected = !root.selected;
+            root.toggled(root.source-index, root.selected);
+        }
+    }
+}
+
+component ImportResultRow inherits Rectangle {
+    in property <string> title;
+    in property <string> subtitle;
+    in property <string> status;
+
+    height: 76px;
+    border-radius: 14px;
+    background: Theme.palette-surface;
+    border-width: 1px;
+    border-color: root.status == "Failed" ? Theme.palette-danger : Theme.palette-border;
+    clip: true;
+
+    Rectangle {
+        x: 14px;
+        y: (parent.height - self.height) / 2;
+        width: 42px;
+        height: 42px;
+        border-radius: 21px;
+        background: root.status == "Imported" ? Theme.palette-primary : Theme.palette-secondary;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+
+        Image {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 24px;
+            height: 24px;
+            source: root.status == "Imported" ? @image-url("../resources/icons/import-success.svg") : (root.status == "Skipped by user" ? @image-url("../resources/icons/import-skipped.svg") : @image-url("../resources/icons/import-failed.svg"));
+            colorize: root.status == "Imported" ? white : (root.status == "Failed" ? Theme.palette-danger : Theme.palette-foreground);
+            image-fit: contain;
+        }
+    }
+
+    VerticalLayout {
+        x: 70px;
+        y: 12px;
+        width: parent.width - 86px;
+        height: parent.height - 20px;
+        spacing: 2px;
+
+        Text {
+            text: root.title;
+            color: Theme.palette-foreground;
+            font-family: "Montserrat";
+            font-size: 20px;
+            font-weight: 700;
+            overflow: elide;
+        }
+
+        Text {
+            text: root.status + " - " + root.subtitle;
+            color: root.status == "Failed" ? Theme.palette-danger : Theme.palette-muted;
+            font-family: "Montserrat";
+            font-size: 16px;
+            font-weight: 600;
+            overflow: elide;
+        }
+    }
+}
+
+component BottomFade inherits Rectangle {
+    background: transparent;
+    height: 64px;
+
+    Image {
+        width: 100%;
+        height: 100%;
+        source: @image-url("../resources/scroll-fade-bottom.svg");
+        image-fit: fill;
+    }
+}
+
+component TopFade inherits Rectangle {
+    background: transparent;
+    height: 58px;
+
+    Image {
+        width: 100%;
+        height: 100%;
+        source: @image-url("../resources/scroll-fade-top.svg");
+        image-fit: fill;
+    }
+}
+
+component MenuItem inherits Rectangle {
+    in property <string> label;
+    in property <string> icon;
+    callback clicked();
+
+    height: 73px;
+    background: touch.pressed ? Theme.palette-surface : Theme.palette-background;
+
+    HorizontalLayout {
+        width: parent.width;
+        height: parent.height;
+        padding-left: 30px;
+        padding-right: 18px;
+
+        Text {
+            text: root.label;
+            color: Theme.palette-foreground;
+            font-family: "Montserrat";
+            font-size: 22px;
+            font-weight: 500;
+            vertical-alignment: center;
+            horizontal-stretch: 1;
+        }
+
+        Rectangle {
+            width: 48px;
+            height: parent.height;
+            background: transparent;
+
+            Image {
+                x: (parent.width - self.width) / 2;
+                y: (parent.height - self.height) / 2;
+                width: 24px;
+                height: 24px;
+                source: root.icon == "plus" ? @image-url("../resources/icons/plus.svg") : (root.icon == "import" ? @image-url("../resources/icons/import.svg") : @image-url("../resources/icons/archive-box.svg"));
+                image-fit: contain;
+            }
+        }
+    }
+
+    touch := TouchArea {
+        width: parent.width;
+        height: parent.height;
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+component Divider inherits Rectangle {
+    height: 1px;
+    background: Theme.palette-border;
+}
+
+component OptionPickerOverlay inherits Rectangle {
+    in property <string> title;
+    in property <[string]> options;
+    in property <int> selected-index;
+    callback selected(int, string);
+    callback close();
+
+    background: #00000055;
+
+    TouchArea {
+        clicked => {
+            root.close();
+        }
+    }
+
+    Rectangle {
+        width: parent.width - 42px;
+        height: 520px;
+        x: 21px;
+        y: (parent.height - self.height) / 2;
+        border-radius: 24px;
+        background: Theme.palette-background;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+        clip: true;
+
+        VerticalLayout {
+            padding-left: 18px;
+            padding-right: 18px;
+            padding-top: 18px;
+            padding-bottom: 18px;
+            spacing: 10px;
+
+            HorizontalLayout {
+                height: 48px;
+
+                Text {
+                    text: root.title;
+                    color: Theme.palette-foreground;
+                    font-family: "Montserrat";
+                    font-size: 28px;
+                    font-weight: 700;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                    overflow: elide;
+                }
+
+                GlyphButton {
+                    glyph: "x";
+                    clicked => { root.close(); }
+                }
+            }
+
+            Flickable {
+                width: 100%;
+                vertical-stretch: 1;
+
+                VerticalLayout {
+                    width: parent.width;
+                    spacing: 8px;
+
+                    for option[index] in root.options: Rectangle {
+                        height: 54px;
+                        border-radius: 16px;
+                        background: index == root.selected-index ? Theme.palette-primary : Theme.palette-secondary;
+                        border-width: 1px;
+                        border-color: Theme.palette-border;
+                        clip: true;
+
+                        Text {
+                            x: 16px;
+                            width: parent.width - 32px;
+                            height: parent.height;
+                            text: option;
+                            color: index == root.selected-index ? white : Theme.palette-foreground;
+                            font-family: "Montserrat";
+                            font-size: 20px;
+                            font-weight: 600;
+                            vertical-alignment: center;
+                            overflow: elide;
+                        }
+
+                        TouchArea {
+                            clicked => {
+                                root.selected(index, option);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+component MenuOverlay inherits Rectangle {
+    callback new-item();
+    callback import-file();
+    callback view-archive();
+    callback close();
+
+    background: #00000055;
+
+    TouchArea {
+        clicked => {
+            root.close();
+        }
+    }
+
+    Rectangle {
+        x: 30px;
+        y: 74px + UISize.control-center-status-bar-height;
+        width: parent.width - 60px;
+        height: 222px;
+        border-radius: 22px;
+        background: Theme.palette-background;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+        clip: true;
+
+        Rectangle {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+
+            MenuItem {
+                y: 0px;
+                width: 100%;
+                label: "New Item";
+                icon: "plus";
+                clicked => { root.new-item(); }
+            }
+            Divider { y: 73px; width: 100%; }
+            MenuItem {
+                y: 74px;
+                width: 100%;
+                label: "Import";
+                icon: "import";
+                clicked => { root.import-file(); }
+            }
+            Divider { y: 147px; width: 100%; }
+            MenuItem {
+                y: 148px;
+                width: 100%;
+                label: "View Archive";
+                icon: "archive";
+                clicked => { root.view-archive(); }
+            }
+        }
+    }
+}
+
+component FilterSheetOverlay inherits Rectangle {
+    in property <string> folder;
+    in property <string> type-filter;
+    in property <string> tag;
+    in property <string> sort-order;
+    callback choose-folder();
+    callback choose-type();
+    callback choose-tag();
+    callback choose-sort();
+    callback reset();
+    callback apply();
+    callback close();
+
+    background: #00000055;
+
+    TouchArea {
+        clicked => { root.close(); }
+    }
+
+    Rectangle {
+        x: 0px;
+        y: parent.height - self.height;
+        width: parent.width;
+        height: 442px;
+        border-radius: 24px;
+        background: Theme.palette-background;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+        clip: true;
+
+        VerticalLayout {
+            padding-left: 24px;
+            padding-right: 24px;
+            padding-top: 14px;
+            padding-bottom: 18px;
+            spacing: 16px;
+
+            Rectangle {
+                width: 100%;
+                height: 16px;
+                background: transparent;
+
+                Rectangle {
+                    x: (parent.width - self.width) / 2;
+                    y: 2px;
+                    width: 40px;
+                    height: 4px;
+                    border-radius: 2px;
+                    background: Theme.palette-muted;
+                }
+            }
+
+            HorizontalLayout {
+                height: 40px;
+
+                Text {
+                    text: "Filters";
+                    color: Theme.palette-foreground;
+                    font-family: "Montserrat";
+                    font-size: 28px;
+                    font-weight: 700;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                }
+
+                PlainLink {
+                    width: 96px;
+                    height: 40px;
+                    text: "Reset";
+                    clicked => { root.reset(); }
+                }
+            }
+
+            Rectangle {
+                width: 100%;
+                height: 225px;
+                border-radius: 24px;
+                background: Theme.palette-background;
+                border-width: 1px;
+                border-color: Theme.palette-border;
+                clip: true;
+
+                VerticalLayout {
+                    width: 100%;
+                    height: 100%;
+
+                    SelectButton {
+                        width: 100%;
+                        label: "Folder";
+                        value: root.folder;
+                        clicked => { root.choose-folder(); }
+                    }
+                    Divider {}
+                    SelectButton {
+                        width: 100%;
+                        label: "Type";
+                        value: root.type-filter;
+                        clicked => { root.choose-type(); }
+                    }
+                    Divider {}
+                    SelectButton {
+                        width: 100%;
+                        label: "Tag";
+                        value: root.tag;
+                        clicked => { root.choose-tag(); }
+                    }
+                    Divider {}
+                    SelectButton {
+                        width: 100%;
+                        label: "Sort by";
+                        value: root.sort-order;
+                        clicked => { root.choose-sort(); }
+                    }
+                }
+            }
+
+            Rectangle {
+                vertical-stretch: 1;
+                background: transparent;
+            }
+
+            ActionButton {
+                width: 100%;
+                text: "Apply";
+                clicked => { root.apply(); }
+            }
+        }
+    }
+}
+
+component EditFieldOverlay inherits Rectangle {
+    in property <int> field-index;
+    in-out property <string> field-label: "";
+    in-out property <string> field-kind: "Text";
+    in-out property <bool> field-hidden: false;
+    in-out property <string> field-label-error: "";
+    in-out property <bool> confirm-delete: false;
+    callback cancel();
+    callback save(int, string, bool);
+    callback delete-field(int);
+
+    background: #00000055;
+
+    TouchArea {}
+
+    Rectangle {
+        width: parent.width - 36px;
+        height: root.confirm-delete ? (root.field-kind == "Boolean" ? 392px : 462px) : (root.field-kind == "Boolean" ? 338px : 408px);
+        x: 18px;
+        y: (parent.height - self.height) / 2;
+        border-radius: 24px;
+        background: Theme.palette-background;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+
+        VerticalLayout {
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            spacing: 12px;
+
+            HorizontalLayout {
+                height: 44px;
+
+                Text {
+                    text: "Edit Field";
+                    color: Theme.palette-foreground;
+                    font-family: "Montserrat";
+                    font-size: 28px;
+                    font-weight: 700;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                }
+
+                GlyphButton {
+                    glyph: "x";
+                    clicked => { root.cancel(); }
+                }
+            }
+
+            SectionLabel { label: "Field label"; }
+            PillInput {
+                width: 100%;
+                text <=> root.field-label;
+                placeholder: "Field label";
+                error: root.field-label-error;
+                edited(text) => {
+                    root.field-label-error = "";
+                }
+            }
+            ErrorText { message: root.field-label-error; }
+
+            if root.field-kind != "Boolean": ToggleRow {
+                width: 100%;
+                checked <=> root.field-hidden;
+                label: "Hide on Details screen";
+            }
+
+            if root.confirm-delete: Text {
+                height: 62px;
+                text: "Delete this custom field? This cannot be undone.";
+                color: #cf896f;
+                font-family: "Montserrat";
+                font-size: 18px;
+                font-weight: 700;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                wrap: word-wrap;
+            }
+
+            Rectangle {
+                vertical-stretch: 1;
+                background: transparent;
+            }
+
+            HorizontalLayout {
+                height: 54px;
+                spacing: 10px;
+
+                if root.confirm-delete: ActionButton {
+                    width: 50%;
+                    height: 54px;
+                    text: "Cancel";
+                    fill: Theme.palette-secondary;
+                    foreground: Theme.palette-foreground;
+                    clicked => {
+                        root.confirm-delete = false;
+                    }
+                }
+
+                if !root.confirm-delete: ActionButton {
+                    width: 32%;
+                    height: 54px;
+                    text: "Delete";
+                    fill: Theme.palette-danger;
+                    foreground: white;
+                    clicked => {
+                        root.confirm-delete = true;
+                    }
+                }
+
+                if !root.confirm-delete: ActionButton {
+                    width: 32%;
+                    height: 54px;
+                    text: "Cancel";
+                    fill: Theme.palette-secondary;
+                    foreground: Theme.palette-foreground;
+                    clicked => { root.cancel(); }
+                }
+
+                ActionButton {
+                    width: root.confirm-delete ? 50% : 32%;
+                    height: 54px;
+                    text: root.confirm-delete ? "Delete Field" : "Save";
+                    fill: root.confirm-delete ? Theme.palette-danger : Theme.palette-primary;
+                    foreground: white;
+                    clicked => {
+                        if (root.confirm-delete) {
+                            root.delete-field(root.field-index);
+                        } else {
+                            root.save(root.field-index, root.field-label, root.field-hidden);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+component NewFolderOverlay inherits Rectangle {
+    in-out property <string> folder-name: "";
+    in-out property <string> folder-error: "";
+    private property <bool> input-focused: false;
+    callback cancel();
+    callback save(string);
+
+    background: #00000055;
+
+    TouchArea {}
+
+    Rectangle {
+        width: parent.width - 36px;
+        height: 306px;
+        x: 18px;
+        y: root.input-focused ? (54px + UISize.control-center-status-bar-height) : (parent.height - self.height) / 2;
+        border-radius: 24px;
+        background: Theme.palette-background;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+
+        animate y {
+            duration: 180ms;
+            easing: ease-in-out;
+        }
+
+        VerticalLayout {
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            spacing: 12px;
+
+            HorizontalLayout {
+                height: 44px;
+
+                Text {
+                    text: "New Folder";
+                    color: Theme.palette-foreground;
+                    font-family: "Montserrat";
+                    font-size: 28px;
+                    font-weight: 700;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                    overflow: elide;
+                }
+
+                GlyphButton {
+                    glyph: "x";
+                    clicked => { root.cancel(); }
+                }
+            }
+
+            SectionLabel { label: "Folder name"; }
+            PillInput {
+                width: 100%;
+                text <=> root.folder-name;
+                placeholder: "Folder name";
+                error: root.folder-error;
+                edited(text) => {
+                    root.folder-error = "";
+                }
+                accepted => {
+                    root.save(root.folder-name);
+                }
+                focus-changed(focused) => {
+                    root.input-focused = focused;
+                }
+            }
+            ErrorText { message: root.folder-error; }
+
+            Rectangle {
+                vertical-stretch: 1;
+                background: transparent;
+            }
+
+            HorizontalLayout {
+                height: 54px;
+                spacing: 10px;
+
+                ActionButton {
+                    width: 50%;
+                    height: 54px;
+                    text: "Cancel";
+                    fill: Theme.palette-secondary;
+                    foreground: Theme.palette-foreground;
+                    clicked => { root.cancel(); }
+                }
+
+                ActionButton {
+                    width: 50%;
+                    height: 54px;
+                    text: "Save";
+                    clicked => {
+                        root.save(root.folder-name);
+                    }
+                }
+            }
+        }
+    }
+}
+
+component DeleteOverlay inherits Rectangle {
+    in property <string> title;
+    in property <string> body;
+    callback cancel();
+    callback confirm();
+
+    background: #00000055;
+
+    TouchArea {}
+
+    Rectangle {
+        width: parent.width - 48px;
+        height: 496px;
+        x: 24px;
+        y: (parent.height - self.height) / 2;
+        border-radius: 24px;
+        background: Theme.palette-background;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+
+        VerticalLayout {
+            padding-left: 24px;
+            padding-right: 24px;
+            padding-top: 26px;
+            padding-bottom: 28px;
+            spacing: 18px;
+
+            Text {
+                text: "!";
+                color: Theme.palette-danger;
+                font-family: "Montserrat";
+                font-size: 52px;
+                font-weight: 700;
+                horizontal-alignment: center;
+            }
+
+            Text {
+                text: root.title;
+                color: Theme.palette-foreground;
+                font-family: "Montserrat";
+                font-size: 36px;
+                font-weight: 700;
+                horizontal-alignment: center;
+                wrap: word-wrap;
+            }
+
+            Text {
+                text: root.body;
+                color: Theme.palette-muted;
+                font-family: "Montserrat";
+                font-size: 23px;
+                font-weight: 500;
+                horizontal-alignment: center;
+                wrap: word-wrap;
+                vertical-stretch: 1;
+            }
+
+            ActionButton {
+                width: 100%;
+                text: "Cancel";
+                fill: Theme.palette-secondary;
+                foreground: Theme.palette-foreground;
+                clicked => { root.cancel(); }
+            }
+
+            ActionButton {
+                width: 100%;
+                text: "Delete";
+                fill: Theme.palette-danger;
+                foreground: white;
+                clicked => { root.confirm(); }
+            }
+        }
+    }
+}
+
+component AddFieldOverlay inherits Rectangle {
+    in-out property <string> field-type: "Text";
+    in-out property <int> field-type-index: 0;
+    in-out property <string> field-label: "";
+    in-out property <string> field-value: "";
+    in-out property <bool> field-bool-value: false;
+    in-out property <string> field-label-error: "";
+    callback cancel();
+    callback add(string, string, string);
+
+    background: #00000055;
+
+    TouchArea {}
+
+    Rectangle {
+        width: parent.width - 36px;
+        height: 620px;
+        x: 18px;
+        y: (parent.height - self.height) / 2;
+        border-radius: 24px;
+        background: Theme.palette-background;
+        border-width: 1px;
+        border-color: Theme.palette-border;
+
+        VerticalLayout {
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            spacing: 12px;
+
+            HorizontalLayout {
+                height: 44px;
+
+                Text {
+                    text: "Add Field";
+                    color: Theme.palette-foreground;
+                    font-family: "Montserrat";
+                    font-size: 28px;
+                    font-weight: 700;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                }
+
+                GlyphButton {
+                    glyph: "x";
+                    clicked => { root.cancel(); }
+                }
+            }
+
+            SectionLabel { label: "Field type"; }
+            Dropdown {
+                width: 100%;
+                height: 56px;
+                options: ["Text", "Hidden", "Boolean"];
+                selected-index <=> root.field-type-index;
+                placeholder: "Text";
+                control-height: 56px;
+                border-radius: 24px;
+                changed(index, text) => {
+                    root.field-type = text;
+                }
+            }
+
+            Text {
+                height: 22px;
+                text: root.field-type == "Hidden" ? "Use hidden fields for PINs and recovery answers." : (root.field-type == "Boolean" ? "Use boolean fields for yes or no values." : "Use text fields for data like security questions.");
+                color: Theme.palette-primary;
+                font-family: "Montserrat";
+                font-size: 14px;
+                font-weight: 500;
+                wrap: word-wrap;
+            }
+
+            SectionLabel { label: "Field label"; }
+            PillInput {
+                width: 100%;
+                text <=> root.field-label;
+                placeholder: "Field label";
+                error: root.field-label-error;
+                edited(text) => {
+                    root.field-label-error = "";
+                }
+            }
+            ErrorText { message: root.field-label-error; }
+
+            SectionLabel { label: root.field-type == "Boolean" ? "Initial state" : "Initial value"; }
+            if root.field-type != "Boolean": PillInput {
+                width: 100%;
+                text <=> root.field-value;
+                placeholder: "Optional value";
+                password: root.field-type == "Hidden";
+            }
+            if root.field-type == "Boolean": Rectangle {
+                width: 100%;
+                height: 56px;
+                border-radius: 24px;
+                background: Theme.palette-secondary;
+
+                Text {
+                    x: 16px;
+                    y: 0px;
+                    width: parent.width - 92px;
+                    height: parent.height;
+                    text: root.field-label == "" ? "Boolean value" : root.field-label;
+                    color: Theme.palette-foreground;
+                    font-family: "Montserrat";
+                    font-size: 20px;
+                    font-weight: 700;
+                    vertical-alignment: center;
+                    overflow: elide;
+                }
+
+                InlineToggle {
+                    x: parent.width - self.width - 12px;
+                    y: (parent.height - self.height) / 2;
+                    checked <=> root.field-bool-value;
+                }
+            }
+
+            Rectangle {
+                height: 10px;
+                background: transparent;
+            }
+
+            HorizontalLayout {
+                height: 54px;
+                spacing: 10px;
+
+                ActionButton {
+                    width: 50%;
+                    height: 54px;
+                    text: "Add";
+                    fill: root.field-label == "" ? Theme.palette-secondary : Theme.palette-primary;
+                    foreground: root.field-label == "" ? Theme.palette-muted : white;
+                    clicked => {
+                        root.add(root.field-type, root.field-label, root.field-type == "Boolean" ? (root.field-bool-value ? "true" : "false") : root.field-value);
+                    }
+                }
+
+                ActionButton {
+                    width: 50%;
+                    height: 54px;
+                    text: "Cancel";
+                    fill: Theme.palette-secondary;
+                    foreground: Theme.palette-foreground;
+                    clicked => { root.cancel(); }
+                }
+            }
+        }
+    }
+}
+
+export component AppWindow inherits Window {
+    in-out property <int> mode: 0;
+    in-out property <string> header-title: "Secure Notes";
+    in-out property <string> status-text: "";
+    in-out property <string> search-text: "";
+    in-out property <[NoteListItem]> list-items: [];
+    in-out property <[NoteListItem]> archive-items: [];
+    in-out property <bool> filters-open: false;
+    in-out property <[string]> filter-folder-options: ["All folders"];
+    in-out property <[string]> filter-type-options: ["All types"];
+    in-out property <[string]> filter-tag-options: ["All tags"];
+    in-out property <[string]> sort-order-options: ["A-Z", "Z-A", "Last Updated", "Recently Added", "Oldest Added", "Type", "Folder", "Favorites First"];
+    in-out property <[string]> edit-folder-options: ["New Folder...", "None"];
+    in-out property <[string]> picker-options: [];
+    in-out property <string> filter-folder: "All folders";
+    in-out property <string> filter-type: "All types";
+    in-out property <string> filter-tag: "All tags";
+    in-out property <string> sort-order: "A-Z";
+    in-out property <string> picker-title: "";
+    in-out property <int> picker-kind: 0;
+    in-out property <int> filter-folder-index: 0;
+    in-out property <int> filter-type-index: 0;
+    in-out property <int> filter-tag-index: 0;
+    in-out property <int> sort-order-index: 0;
+    in-out property <int> picker-index: 0;
+
+    in-out property <string> detail-title: "";
+    in-out property <string> detail-type: "";
+    in-out property <string> detail-tags: "";
+    in-out property <string> detail-updated: "";
+    in-out property <string> detail-body: "";
+    in-out property <[CustomFieldListItem]> detail-field-items: [];
+    in-out property <bool> detail-pin-required: false;
+    in-out property <bool> detail-archived: false;
+
+    in-out property <string> edit-header: "Create New Item";
+    in-out property <string> edit-title: "";
+    in-out property <string> edit-type: "Secure Note";
+    in-out property <int> edit-type-index: 1;
+    in-out property <int> edit-folder-index: 0;
+    in-out property <int> edit-folder-committed-index: 0;
+    in-out property <string> edit-account: "";
+    in-out property <string> edit-secret: "";
+    in-out property <string> edit-fields: "";
+    in-out property <[CustomFieldListItem]> edit-field-items: [];
+    in-out property <string> edit-folder: "";
+    in-out property <string> edit-tags: "";
+    in-out property <bool> edit-favorite: false;
+    in-out property <bool> edit-existing: false;
+    in-out property <bool> edit-pin-required: false;
+    in-out property <string> edit-label-error: "";
+    in-out property <string> edit-secret-error: "";
+
+    in-out property <string> delete-title: "Delete Note";
+    in-out property <string> delete-body: "";
+    in-out property <bool> menu-open: false;
+    in-out property <bool> delete-confirm-open: false;
+    in-out property <bool> add-field-open: false;
+    in-out property <bool> edit-field-open: false;
+    in-out property <bool> new-folder-open: false;
+    in-out property <bool> picker-open: false;
+    in-out property <string> add-field-type: "Text";
+    in-out property <int> add-field-type-index: 0;
+    in-out property <string> add-field-label: "";
+    in-out property <string> add-field-value: "";
+    in-out property <bool> add-field-bool-value: false;
+    in-out property <string> add-field-label-error: "";
+    in-out property <int> edit-field-index: -1;
+    in-out property <string> edit-field-label: "";
+    in-out property <string> edit-field-kind: "Text";
+    in-out property <bool> edit-field-hidden: false;
+    in-out property <string> edit-field-label-error: "";
+    in-out property <bool> edit-field-delete-confirm: false;
+    in-out property <string> new-folder-name: "";
+    in-out property <string> new-folder-error: "";
+    private property <bool> filters-active: root.filter-folder != "All folders" || root.filter-type != "All types" || root.filter-tag != "All tags" || root.sort-order != "A-Z";
+    private property <bool> edit-scroll-active: false;
+    private property <length> edit-scroll-before: 0px;
+    private property <length> edit-keyboard-safe-height: 350px;
+    private property <length> edit-keyboard-spacer: root.edit-scroll-active ? 300px : 16px;
+    in-out property <length> list-scroll-y: 0px;
+    in-out property <length> edit-scroll-y: 0px;
+    in-out property <int> import-stage: 0;
+    in-out property <string> import-file-label: "";
+    in-out property <string> import-summary: "";
+    in-out property <[ImportReviewListItem]> import-review-items: [];
+    in-out property <[ImportResultListItem]> import-result-items: [];
+    in-out property <bool> import-can-continue: false;
+
+    callback search-changed(string);
+    callback filter-folder-changed(string);
+    callback filter-type-changed(string);
+    callback filter-tag-changed(string);
+    callback sort-order-changed(string);
+    callback filter-folder-index-changed(int);
+    callback filter-type-index-changed(int);
+    callback filter-tag-index-changed(int);
+    callback sort-order-index-changed(int);
+    callback row-selected(int);
+    callback archive-row-selected(int);
+    callback new-note-requested();
+    callback import-file-requested();
+    callback choose-import-file-requested();
+    callback continue-import-requested();
+    callback cancel-import-requested();
+    callback import-back-requested();
+    callback view-archive-requested();
+    callback back-to-list-requested();
+    callback back-to-archive-requested();
+    callback edit-back-requested();
+    callback edit-note-requested();
+    callback custom-field-value-changed(int, string);
+    callback custom-field-rename-requested(int, string, bool);
+    callback custom-field-delete-requested(int);
+    callback add-field-requested(string, string, string);
+    callback new-folder-created(string);
+    callback import-review-toggled(int, bool);
+    callback save-note-requested(string, string, string, string, string, string, string, bool, bool);
+    callback archive-note-requested();
+    callback restore-note-requested();
+    callback delete-note-confirmed();
+
+    animate edit-scroll-y {
+        duration: 180ms;
+        easing: ease-in-out;
+    }
+
+    function focus-edit-field(field-y: length, field-height: length) {
+        if (!root.edit-scroll-active) {
+            root.edit-scroll-active = true;
+            root.edit-scroll-before = root.edit-scroll-y;
+        }
+        if (field-y + field-height + 24px > -root.edit-scroll-y + root.edit-keyboard-safe-height) {
+            root.edit-scroll-y = -(field-y + field-height + 24px - root.edit-keyboard-safe-height);
+        } else if (field-y < -root.edit-scroll-y + 16px) {
+            root.edit-scroll-y = -(field-y - 16px);
+            if (root.edit-scroll-y > 0px) {
+                root.edit-scroll-y = 0px;
+            }
+        }
+    }
+
+    function restore-edit-scroll() {
+        if (root.edit-scroll-active) {
+            root.edit-scroll-y = root.edit-scroll-before;
+            root.edit-scroll-active = false;
+        }
+    }
+
+    function dismiss-edit-keyboard() {
+        focus-sink.focus();
+        root.restore-edit-scroll();
+    }
+
+    function reset-edit-scroll() {
+        root.edit-scroll-y = 0px;
+        root.edit-scroll-before = 0px;
+        root.edit-scroll-active = false;
+    }
+
+    changed mode => {
+        if (root.mode == 2) {
+            root.reset-edit-scroll();
+        }
+    }
+
+    function open-picker(kind: int) {
+        root.picker-kind = kind;
+        if (kind == 0) {
+            root.picker-title = "Folder";
+            root.picker-options = root.filter-folder-options;
+            root.picker-index = root.filter-folder-index;
+        } else if (kind == 1) {
+            root.picker-title = "Type";
+            root.picker-options = root.filter-type-options;
+            root.picker-index = root.filter-type-index;
+        } else if (kind == 2) {
+            root.picker-title = "Tags";
+            root.picker-options = root.filter-tag-options;
+            root.picker-index = root.filter-tag-index;
+        } else if (kind == 3) {
+            root.picker-title = "Sort by";
+            root.picker-options = root.sort-order-options;
+            root.picker-index = root.sort-order-index;
+        } else {
+            root.picker-title = "Assign Folder";
+            root.picker-options = root.edit-folder-options;
+            root.picker-index = root.edit-folder-index;
+        }
+        root.picker-open = true;
+    }
+
+    function apply-picker-selection(kind: int, index: int, label: string) {
+        root.picker-open = false;
+        if (kind == 0) {
+            root.filter-folder-index = index;
+            root.filter-folder = label;
+            root.filter-folder-index-changed(index);
+            root.filter-folder-changed(label);
+        } else if (kind == 1) {
+            root.filter-type-index = index;
+            root.filter-type = label;
+            root.filter-type-index-changed(index);
+            root.filter-type-changed(label);
+        } else if (kind == 2) {
+            root.filter-tag-index = index;
+            root.filter-tag = label;
+            root.filter-tag-index-changed(index);
+            root.filter-tag-changed(label);
+        } else if (kind == 3) {
+            root.sort-order-index = index;
+            root.sort-order = label;
+            root.sort-order-index-changed(index);
+            root.sort-order-changed(label);
+        } else {
+            if (label == "New Folder...") {
+                root.edit-folder-index = root.edit-folder-committed-index;
+                root.new-folder-name = "";
+                root.new-folder-error = "";
+                root.new-folder-open = true;
+            } else {
+                root.edit-folder = label == "None" ? "" : label;
+                root.edit-folder-index = index;
+                root.edit-folder-committed-index = index;
+            }
+        }
+    }
+
+    title: "Secure Notes";
+    preferred-width: 480px;
+    preferred-height: 800px;
+    background: Theme.palette-background;
+
+    if !Theme.is-dark: Image {
+        width: parent.width;
+        height: parent.height;
+        source: @image-url("../resources/background-light.svg");
+        image-fit: cover;
+    }
+
+    focus-sink := FocusScope {
+        width: 1px;
+        height: 1px;
+    }
+
+    if root.mode == 0 || root.mode == 2: TouchArea {
+        width: parent.width;
+        height: parent.height;
+        clicked => {
+            root.dismiss-edit-keyboard();
+        }
+    }
+
+    VerticalLayout {
+        width: parent.width;
+        height: parent.height;
+        padding-left: 24px;
+        padding-right: 24px;
+        padding-top: 14px + UISize.control-center-status-bar-height;
+        padding-bottom: 18px;
+        spacing: 12px;
+
+        HorizontalLayout {
+            height: 58px;
+
+            GlyphButton {
+                glyph: root.mode == 0 ? "" : "back";
+                clicked => {
+                    if (root.mode == 0) {
+                        root.dismiss-edit-keyboard();
+                    } else if (root.mode == 4) {
+                        root.back-to-list-requested();
+                    } else if (root.mode == 5) {
+                        root.back-to-archive-requested();
+                    } else if (root.mode == 3 && root.import-stage != 0) {
+                        root.import-back-requested();
+                    } else if (root.mode == 2) {
+                        root.edit-back-requested();
+                    } else {
+                        root.back-to-list-requested();
+                    }
+                }
+            }
+
+            Text {
+                text: root.header-title;
+                color: Theme.palette-foreground;
+                font-family: "Montserrat";
+                font-size: 28px;
+                font-weight: 700;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                horizontal-stretch: 1;
+                overflow: elide;
+            }
+
+            Rectangle {
+                width: 52px;
+                height: 52px;
+                border-radius: 26px;
+                background: header-touch.pressed && root.mode == 0 ? Theme.palette-secondary : transparent;
+
+                if root.mode == 0: Image {
+                    x: (parent.width - self.width) / 2;
+                    y: (parent.height - self.height) / 2;
+                    width: 24px;
+                    height: 24px;
+                    source: @image-url("../resources/icons/ellipsis.svg");
+                    colorize: Theme.palette-foreground;
+                    image-fit: contain;
+                }
+
+                header-touch := TouchArea {
+                    clicked => {
+                        if (root.mode == 0) {
+                            root.dismiss-edit-keyboard();
+                            root.menu-open = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if root.mode == 0: VerticalLayout {
+            spacing: 12px;
+            vertical-stretch: 1;
+
+            HorizontalLayout {
+                width: 100%;
+                height: 56px;
+                spacing: 8px;
+
+                SearchInput {
+                    horizontal-stretch: 1;
+                    text <=> root.search-text;
+                    edited(text) => {
+                        root.search-changed(text);
+                    }
+                }
+
+                FilterButton {
+                    active: root.filters-active;
+                    open: root.filters-open;
+                    clicked => {
+                        root.dismiss-edit-keyboard();
+                        root.filters-open = !root.filters-open;
+                    }
+                }
+            }
+
+            Text {
+                height: 24px;
+                text: root.status-text;
+                color: Theme.palette-muted;
+                font-family: "Montserrat";
+                font-size: 14px;
+                font-weight: 600;
+                vertical-alignment: center;
+                overflow: elide;
+            }
+
+            Rectangle {
+                width: 100%;
+                vertical-stretch: 1;
+                background: transparent;
+                clip: true;
+
+                list-flick := Flickable {
+                    width: parent.width;
+                    height: parent.height;
+                    viewport-y <=> root.list-scroll-y;
+
+                    VerticalLayout {
+                        width: parent.width;
+                        spacing: 10px;
+
+                        for item[index] in root.list-items: NoteRow {
+                            width: 100%;
+                            item-id: item.id;
+                            title: item.title;
+                            subtitle: item.subtitle;
+                            pin-required: item.pin-required;
+                            clicked(id) => {
+                                root.row-selected(id);
+                            }
+                        }
+
+                        if root.list-items.length == 0: Text {
+                            height: 116px;
+                            text: "No notes found.";
+                            color: Theme.palette-muted;
+                            font-family: "Montserrat";
+                            font-size: 18px;
+                            font-weight: 600;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
+
+                        PlainLink {
+                            width: 100%;
+                            icon: "plus";
+                            text: "New Item";
+                            clicked => { root.new-note-requested(); }
+                        }
+                    }
+                }
+
+                TopFade {
+                    width: parent.width;
+                    y: 0px;
+                    visible: list-flick.viewport-y < -1px;
+                }
+
+                BottomFade {
+                    width: parent.width;
+                    y: parent.height - self.height;
+                    visible: list-flick.viewport-height > list-flick.height && list-flick.viewport-y > list-flick.height - list-flick.viewport-height + 1px;
+                }
+            }
+        }
+
+        if root.mode == 1 || root.mode == 5: VerticalLayout {
+            spacing: 12px;
+            vertical-stretch: 1;
+
+            Rectangle {
+                width: 100%;
+                height: 96px;
+                border-radius: 14px;
+                background: Theme.palette-surface;
+                border-width: 1px;
+                border-color: Theme.palette-border;
+
+                VerticalLayout {
+                    padding-left: 16px;
+                    padding-right: 16px;
+                    padding-top: 12px;
+                    padding-bottom: 10px;
+                    spacing: 3px;
+
+                    Text {
+                        text: root.detail-title;
+                        color: Theme.palette-foreground;
+                        font-family: "Montserrat";
+                        font-size: 22px;
+                        font-weight: 700;
+                        overflow: elide;
+                    }
+
+                    Text {
+                        text: root.detail-type + (root.detail-pin-required ? "  PIN required" : "");
+                        color: Theme.palette-muted;
+                        font-family: "Montserrat";
+                        font-size: 16px;
+                        font-weight: 600;
+                        overflow: elide;
+                    }
+
+                    Text {
+                        text: root.detail-tags;
+                        color: Theme.palette-primary;
+                        font-family: "Montserrat";
+                        font-size: 14px;
+                        font-weight: 600;
+                        overflow: elide;
+                    }
+                }
+            }
+
+            Rectangle {
+                width: 100%;
+                vertical-stretch: 1;
+                background: transparent;
+                clip: true;
+
+                detail-flick := Flickable {
+                    width: parent.width;
+                    height: parent.height;
+
+                    VerticalLayout {
+                        width: parent.width;
+                        spacing: 10px;
+
+                        SectionLabel { label: "Information"; }
+
+                        DetailTextBox {
+                            width: 100%;
+                            min-box-height: 132px;
+                            text: root.detail-body;
+                        }
+
+                        if root.detail-field-items.length > 0: SectionLabel { label: "Custom Fields"; }
+
+                        for field[index] in root.detail-field-items: DetailFieldBox {
+                            width: 100%;
+                            label: field.label;
+                            value: field.value;
+                            kind: field.kind;
+                        }
+
+                        Rectangle {
+                            height: 8px;
+                            background: transparent;
+                        }
+                    }
+                }
+
+                TopFade {
+                    width: parent.width;
+                    y: 0px;
+                    visible: detail-flick.viewport-y < -1px;
+                }
+
+                BottomFade {
+                    width: parent.width;
+                    y: parent.height - self.height;
+                    visible: detail-flick.viewport-height > detail-flick.height && detail-flick.viewport-y > detail-flick.height - detail-flick.viewport-height + 1px;
+                }
+            }
+
+            if root.mode == 1: HorizontalLayout {
+                width: 100%;
+                height: 58px;
+                spacing: 10px;
+
+                ActionButton {
+                    width: 50%;
+                    text: "Edit";
+                    fill: Theme.palette-secondary;
+                    foreground: Theme.palette-foreground;
+                    clicked => { root.edit-note-requested(); }
+                }
+
+                ActionButton {
+                    width: 50%;
+                    text: "Archive";
+                    clicked => { root.archive-note-requested(); }
+                }
+            }
+
+            if root.mode == 1: ActionButton {
+                width: 100%;
+                text: "Delete";
+                fill: Theme.palette-danger;
+                foreground: white;
+                clicked => { root.delete-confirm-open = true; }
+            }
+
+            if root.mode == 5: ActionButton {
+                width: 100%;
+                text: "Delete";
+                fill: Theme.palette-danger;
+                foreground: white;
+                clicked => { root.delete-confirm-open = true; }
+            }
+
+            if root.mode == 5: ActionButton {
+                width: 100%;
+                text: "Restore Note";
+                clicked => { root.restore-note-requested(); }
+            }
+        }
+
+        if root.mode == 2: VerticalLayout {
+            spacing: 12px;
+            vertical-stretch: 1;
+
+            if root.edit-header != "": Text {
+                text: root.edit-header;
+                color: Theme.palette-muted;
+                font-family: "Montserrat";
+                font-size: 16px;
+                font-weight: 700;
+                horizontal-alignment: center;
+            }
+
+            Rectangle {
+                width: 100%;
+                vertical-stretch: 1;
+                background: transparent;
+                clip: true;
+
+                edit-scroll := Flickable {
+                    width: parent.width;
+                    height: parent.height;
+                    viewport-y <=> root.edit-scroll-y;
+
+                    VerticalLayout {
+                        width: parent.width;
+                        spacing: 16px;
+
+                        VerticalLayout {
+                            width: 100%;
+                            height: 86px;
+                            spacing: 8px;
+
+                            SectionLabel { label: "Type"; clicked => { root.dismiss-edit-keyboard(); } }
+                            Dropdown {
+                                width: 100%;
+                                height: 56px;
+                                options: ["Login", "Secure Note", "Payment Card", "Identity", "SSH Key"];
+                                selected-index <=> root.edit-type-index;
+                                placeholder: "Select Type";
+                                control-height: 56px;
+                                border-radius: 24px;
+                                changed(index, text) => {
+                                    root.edit-type = text;
+                                }
+                            }
+                        }
+
+                        VerticalLayout {
+                            width: 100%;
+                            height: 86px;
+                            spacing: 8px;
+
+                            SectionLabel { label: "Folder"; clicked => { root.dismiss-edit-keyboard(); } }
+                            Dropdown {
+                                width: 100%;
+                                height: 56px;
+                                options: root.edit-folder-options;
+                                selected-index <=> root.edit-folder-index;
+                                placeholder: "None";
+                                control-height: 56px;
+                                border-radius: 24px;
+                                changed(index, text) => {
+                                    if (text == "New Folder...") {
+                                        root.edit-folder-index = root.edit-folder-committed-index;
+                                        root.new-folder-name = "";
+                                        root.new-folder-error = "";
+                                        root.new-folder-open = true;
+                                    } else {
+                                        root.edit-folder = text == "None" ? "" : text;
+                                        root.edit-folder-committed-index = index;
+                                    }
+                                }
+                            }
+                        }
+
+                        VerticalLayout {
+                            width: 100%;
+                            height: root.edit-label-error == "" ? 86px : 120px;
+                            spacing: 8px;
+
+                            SectionLabel { label: "Label"; clicked => { root.dismiss-edit-keyboard(); } }
+                            PillInput {
+                                width: 100%;
+                                text <=> root.edit-title;
+                                placeholder: "Item Name";
+                                error: root.edit-label-error;
+                                edited(text) => {
+                                    root.edit-label-error = "";
+                                    root.focus-edit-field(204px, 56px);
+                                }
+                                accepted => {
+                                    root.restore-edit-scroll();
+                                }
+                                focus-changed(focused) => {
+                                    if (focused) {
+                                        root.focus-edit-field(204px, 56px);
+                                    }
+                                }
+                            }
+                            if root.edit-label-error != "": ErrorText { message: root.edit-label-error; }
+                        }
+
+                        if root.edit-type != "Secure Note": VerticalLayout {
+                            width: 100%;
+                            height: 86px;
+                            spacing: 8px;
+
+                            SectionLabel {
+                                label: root.edit-type == "Login" ? "Account" : (root.edit-type == "Payment Card" ? "Cardholder" : (root.edit-type == "SSH Key" ? "Public Key" : "Account (optional)"));
+                                clicked => { root.dismiss-edit-keyboard(); }
+                            }
+                            PillInput {
+                                width: 100%;
+                                text <=> root.edit-account;
+                                placeholder: root.edit-type == "Login" ? "Username or email" : (root.edit-type == "Payment Card" ? "Cardholder name" : (root.edit-type == "SSH Key" ? "Public key" : "Associated username"));
+                                edited(text) => {
+                                    root.focus-edit-field(306px, 56px);
+                                }
+                                accepted => {
+                                    root.restore-edit-scroll();
+                                }
+                                focus-changed(focused) => {
+                                    if (focused) {
+                                        root.focus-edit-field(306px, 56px);
+                                    }
+                                }
+                            }
+                        }
+
+                        VerticalLayout {
+                            width: 100%;
+                            height: root.edit-secret-error == "" ? 218px : 252px;
+                            spacing: 8px;
+
+                            SectionLabel {
+                                label: root.edit-type == "Login" ? "Password" : (root.edit-type == "Payment Card" ? "Card Number" : (root.edit-type == "SSH Key" ? "Private Key" : "Private Details"));
+                                clicked => { root.dismiss-edit-keyboard(); }
+                            }
+                            MultiLineInput {
+                                width: 100%;
+                                text <=> root.edit-secret;
+                                placeholder: root.edit-type == "Login" ? "Password" : (root.edit-type == "Payment Card" ? "Card number" : (root.edit-type == "SSH Key" ? "Private key" : "Passport, insurance, account, serial number..."));
+                                error: root.edit-secret-error;
+                                edited(text) => {
+                                    root.edit-secret-error = "";
+                                    root.focus-edit-field(root.edit-type == "Secure Note" ? 306px : 408px, 188px);
+                                }
+                                accepted => {
+                                    root.restore-edit-scroll();
+                                }
+                                focus-changed(focused) => {
+                                    if (focused) {
+                                        root.focus-edit-field(root.edit-type == "Secure Note" ? 306px : 408px, 188px);
+                                    }
+                                }
+                            }
+                            if root.edit-secret-error != "": ErrorText { message: root.edit-secret-error; }
+                        }
+
+                        VerticalLayout {
+                            width: 100%;
+                            spacing: 8px;
+
+                            if root.edit-field-items.length == 0: Text {
+                                height: 38px;
+                                text: "No custom fields yet.";
+                                color: Theme.palette-muted;
+                                font-family: "Montserrat";
+                                font-size: 16px;
+                                font-weight: 600;
+                                vertical-alignment: center;
+                            }
+                            for field[index] in root.edit-field-items: CustomFieldRow {
+                                width: 100%;
+                                field-index: field.index;
+                                label: field.label;
+                                value: field.value;
+                                kind: field.kind;
+                                changed(index, value) => {
+                                    if (field.kind != "Boolean") {
+                                        root.focus-edit-field((root.edit-type == "Secure Note" ? 560px : 662px) + index * 120px, 108px);
+                                    }
+                                    root.custom-field-value-changed(index, value);
+                                }
+                                edit-requested(index) => {
+                                    root.edit-field-index = index;
+                                    root.edit-field-label = field.label;
+                                    root.edit-field-kind = field.kind;
+                                    root.edit-field-hidden = field.kind == "Hidden";
+                                    root.edit-field-label-error = "";
+                                    root.edit-field-delete-confirm = false;
+                                    root.edit-field-open = true;
+                                }
+                                focus-changed(focused) => {
+                                    if (focused) {
+                                        root.focus-edit-field((root.edit-type == "Secure Note" ? 560px : 662px) + index * 120px, 108px);
+                                    }
+                                }
+                            }
+                            PlainLink {
+                                width: 100%;
+                                icon: "plus";
+                                text: "Add field";
+                                clicked => {
+                                    root.dismiss-edit-keyboard();
+                                    root.add-field-label = "";
+                                    root.add-field-value = "";
+                                    root.add-field-bool-value = false;
+                                    root.add-field-type = "Text";
+                                    root.add-field-type-index = 0;
+                                    root.add-field-label-error = "";
+                                    root.add-field-open = true;
+                                }
+                            }
+                        }
+
+                        VerticalLayout {
+                            width: 100%;
+                            height: 86px;
+                            spacing: 8px;
+
+                            SectionLabel { label: "Tags"; clicked => { root.dismiss-edit-keyboard(); } }
+                            PillInput {
+                                width: 100%;
+                                text <=> root.edit-tags;
+                                placeholder: "travel, policy, serial";
+                                edited(text) => {
+                                    root.focus-edit-field((root.edit-type == "Secure Note" ? 646px : 748px) + root.edit-field-items.length * 120px, 56px);
+                                }
+                                accepted => {
+                                    root.restore-edit-scroll();
+                                }
+                                focus-changed(focused) => {
+                                    if (focused) {
+                                        root.focus-edit-field((root.edit-type == "Secure Note" ? 646px : 748px) + root.edit-field-items.length * 120px, 56px);
+                                    }
+                                }
+                            }
+                        }
+
+                        ToggleRow {
+                            width: 100%;
+                            checked <=> root.edit-pin-required;
+                        }
+
+                        Rectangle {
+                            height: root.edit-keyboard-spacer;
+                            background: transparent;
+                            TouchArea {
+                                clicked => {
+                                    root.dismiss-edit-keyboard();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                TopFade {
+                    width: parent.width;
+                    y: 0px;
+                    visible: edit-scroll.viewport-y < -1px;
+                }
+
+                BottomFade {
+                    width: parent.width;
+                    y: parent.height - self.height;
+                    visible: edit-scroll.viewport-height > edit-scroll.height && edit-scroll.viewport-y > edit-scroll.height - edit-scroll.viewport-height + 1px;
+                }
+            }
+
+            HorizontalLayout {
+                width: 100%;
+                height: 60px;
+                spacing: 10px;
+
+                ActionButton {
+                    width: 50%;
+                    text: "Cancel";
+                    fill: Theme.palette-secondary;
+                    foreground: Theme.palette-foreground;
+                    clicked => {
+                        root.restore-edit-scroll();
+                        root.edit-back-requested();
+                    }
+                }
+
+                ActionButton {
+                    width: 50%;
+                    text: "Save";
+                    clicked => {
+                        root.restore-edit-scroll();
+                        root.save-note-requested(root.edit-title, root.edit-type, root.edit-account, root.edit-secret, root.edit-fields, root.edit-folder, root.edit-tags, root.edit-favorite, root.edit-pin-required);
+                    }
+                }
+            }
+        }
+
+        if root.mode == 3: VerticalLayout {
+            spacing: 16px;
+            vertical-stretch: 1;
+
+            if root.import-stage == 0: VerticalLayout {
+                spacing: 20px;
+                vertical-stretch: 1;
+
+                Rectangle {
+                    width: 100%;
+                    height: 184px;
+                    background: transparent;
+
+                    ImportHeroIcon {
+                        x: (parent.width - self.width) / 2;
+                    }
+                }
+
+                Text {
+                    text: "Import Existing Items";
+                    color: Theme.palette-foreground;
+                    font-family: "Montserrat";
+                    font-size: 28px;
+                    font-weight: 700;
+                    horizontal-alignment: center;
+                    wrap: word-wrap;
+                }
+
+                Text {
+                    text: "Add existing logins, secure notes, payment cards, identities, and SSH keys from an unencrypted Bitwarden JSON export.";
+                    color: Theme.palette-foreground;
+                    font-family: "Montserrat";
+                    font-size: 20px;
+                    font-weight: 500;
+                    horizontal-alignment: center;
+                    wrap: word-wrap;
+                }
+
+                Text {
+                    text: "Nothing is imported until you review the file summary and continue.";
+                    color: Theme.palette-muted;
+                    font-family: "Montserrat";
+                    font-size: 16px;
+                    font-weight: 600;
+                    horizontal-alignment: center;
+                    wrap: word-wrap;
+                }
+
+                Rectangle {
+                    vertical-stretch: 1;
+                    background: transparent;
+                }
+
+                ActionButton {
+                    width: 100%;
+                    text: "Choose JSON File";
+                    clicked => { root.choose-import-file-requested(); }
+                }
+            }
+
+            if root.import-stage == 1: VerticalLayout {
+                spacing: 10px;
+                vertical-stretch: 1;
+
+                Flickable {
+                    width: 100%;
+                    vertical-stretch: 1;
+
+                    VerticalLayout {
+                        width: parent.width;
+                        spacing: 10px;
+
+                        if root.import-review-items.length == 0: Text {
+                            height: 180px;
+                            text: root.import-summary;
+                            color: Theme.palette-foreground;
+                            font-family: "Montserrat";
+                            font-size: 18px;
+                            font-weight: 600;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                            wrap: word-wrap;
+                        }
+
+                        for item[index] in root.import-review-items: ImportReviewRow {
+                            width: 100%;
+                            source-index: item.source-index;
+                            title: item.title;
+                            subtitle: item.subtitle;
+                            similar-to: item.similar-to;
+                            selected: item.selected;
+                            toggled(source_id, selected) => {
+                                root.import-review-toggled(source_id, selected);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if root.import-stage == 2: VerticalLayout {
+                spacing: 14px;
+                vertical-stretch: 1;
+
+                Text {
+                    height: 80px;
+                    text: root.import-summary;
+                    color: Theme.palette-foreground;
+                    font-family: "Montserrat";
+                    font-size: 22px;
+                    font-weight: 700;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                    wrap: word-wrap;
+                }
+
+                Flickable {
+                    width: 100%;
+                    vertical-stretch: 1;
+
+                    VerticalLayout {
+                        width: parent.width;
+                        spacing: 10px;
+
+                        for item[index] in root.import-result-items: ImportResultRow {
+                            width: 100%;
+                            title: item.title;
+                            subtitle: item.subtitle;
+                            status: item.status;
+                        }
+                    }
+                }
+            }
+
+            if root.import-stage == 1: HorizontalLayout {
+                width: 100%;
+                height: 60px;
+                spacing: 10px;
+
+                ActionButton {
+                    width: 50%;
+                    text: "Cancel";
+                    fill: Theme.palette-secondary;
+                    foreground: Theme.palette-foreground;
+                    clicked => { root.cancel-import-requested(); }
+                }
+
+                ActionButton {
+                    width: 50%;
+                    text: "Continue";
+                    fill: root.import-can-continue ? Theme.palette-primary : Theme.palette-secondary;
+                    foreground: root.import-can-continue ? white : Theme.palette-muted;
+                    clicked => {
+                        if (root.import-can-continue) {
+                            root.continue-import-requested();
+                        }
+                    }
+                }
+            }
+
+            if root.import-stage == 2: ActionButton {
+                width: 100%;
+                height: 60px;
+                text: "Done";
+                clicked => { root.cancel-import-requested(); }
+            }
+        }
+
+        if root.mode == 4: VerticalLayout {
+            spacing: 12px;
+            vertical-stretch: 1;
+
+            Text {
+                height: 24px;
+                text: root.status-text;
+                color: Theme.palette-muted;
+                font-family: "Montserrat";
+                font-size: 14px;
+                font-weight: 600;
+                vertical-alignment: center;
+            }
+
+            Flickable {
+                width: 100%;
+                vertical-stretch: 1;
+
+                VerticalLayout {
+                    width: parent.width;
+                    spacing: 10px;
+
+                    for item[index] in root.archive-items: NoteRow {
+                        width: 100%;
+                        item-id: item.id;
+                        title: item.title;
+                        subtitle: item.subtitle;
+                        pin-required: item.pin-required;
+                        clicked(id) => {
+                            root.archive-row-selected(id);
+                        }
+                    }
+
+                    if root.archive-items.length == 0: Text {
+                        height: 116px;
+                        text: "No archived notes.";
+                        color: Theme.palette-muted;
+                        font-family: "Montserrat";
+                        font-size: 18px;
+                        font-weight: 600;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
+                    }
+                }
+            }
+        }
+    }
+
+    if root.menu-open: MenuOverlay {
+        width: parent.width;
+        height: parent.height;
+        close => { root.menu-open = false; }
+        new-item => {
+            root.menu-open = false;
+            root.new-note-requested();
+        }
+        import-file => {
+            root.menu-open = false;
+            root.import-file-requested();
+        }
+        view-archive => {
+            root.menu-open = false;
+            root.view-archive-requested();
+        }
+    }
+
+    if root.filters-open: FilterSheetOverlay {
+        width: parent.width;
+        height: parent.height;
+        folder: root.filter-folder;
+        type-filter: root.filter-type;
+        tag: root.filter-tag;
+        sort-order: root.sort-order;
+        close => {
+            root.filters-open = false;
+        }
+        apply => {
+            root.filters-open = false;
+        }
+        reset => {
+            root.filter-folder-index = 0;
+            root.filter-type-index = 0;
+            root.filter-tag-index = 0;
+            root.sort-order-index = 0;
+            root.filter-folder = root.filter-folder-options.length > 0 ? root.filter-folder-options[0] : "All folders";
+            root.filter-type = root.filter-type-options.length > 0 ? root.filter-type-options[0] : "All types";
+            root.filter-tag = root.filter-tag-options.length > 0 ? root.filter-tag-options[0] : "All tags";
+            root.sort-order = root.sort-order-options.length > 0 ? root.sort-order-options[0] : "A-Z";
+            root.filter-folder-index-changed(0);
+            root.filter-type-index-changed(0);
+            root.filter-tag-index-changed(0);
+            root.sort-order-index-changed(0);
+            root.filter-folder-changed(root.filter-folder);
+            root.filter-type-changed(root.filter-type);
+            root.filter-tag-changed(root.filter-tag);
+            root.sort-order-changed(root.sort-order);
+        }
+        choose-folder => {
+            root.open-picker(0);
+        }
+        choose-type => {
+            root.open-picker(1);
+        }
+        choose-tag => {
+            root.open-picker(2);
+        }
+        choose-sort => {
+            root.open-picker(3);
+        }
+    }
+
+    if root.delete-confirm-open: DeleteOverlay {
+        width: parent.width;
+        height: parent.height;
+        title: root.delete-title;
+        body: root.delete-body;
+        cancel => {
+            root.delete-confirm-open = false;
+        }
+        confirm => {
+            root.delete-confirm-open = false;
+            root.delete-note-confirmed();
+        }
+    }
+
+    if root.add-field-open: AddFieldOverlay {
+        width: parent.width;
+        height: parent.height;
+        field-type <=> root.add-field-type;
+        field-type-index <=> root.add-field-type-index;
+        field-label <=> root.add-field-label;
+        field-value <=> root.add-field-value;
+        field-bool-value <=> root.add-field-bool-value;
+        field-label-error <=> root.add-field-label-error;
+        cancel => {
+            root.add-field-open = false;
+        }
+        add(kind, label, value) => {
+            if (label == "") {
+                root.add-field-label-error = "Missing field, please add a Label";
+            } else {
+                root.add-field-open = false;
+                root.add-field-requested(kind, label, value);
+            }
+        }
+    }
+
+    if root.edit-field-open: EditFieldOverlay {
+        width: parent.width;
+        height: parent.height;
+        field-index: root.edit-field-index;
+        field-label <=> root.edit-field-label;
+        field-kind <=> root.edit-field-kind;
+        field-hidden <=> root.edit-field-hidden;
+        field-label-error <=> root.edit-field-label-error;
+        confirm-delete <=> root.edit-field-delete-confirm;
+        cancel => {
+            root.edit-field-open = false;
+        }
+        save(index, label, hidden) => {
+            if (label == "") {
+                root.edit-field-label-error = "Missing field, please add a Label";
+            } else {
+                root.edit-field-open = false;
+                root.custom-field-rename-requested(index, label, hidden);
+            }
+        }
+        delete-field(index) => {
+            root.edit-field-open = false;
+            root.custom-field-delete-requested(index);
+        }
+    }
+
+    if root.new-folder-open: NewFolderOverlay {
+        width: parent.width;
+        height: parent.height;
+        folder-name <=> root.new-folder-name;
+        folder-error <=> root.new-folder-error;
+        cancel => {
+            root.new-folder-open = false;
+        }
+        save(name) => {
+            root.new-folder-created(name);
+        }
+    }
+
+    if root.picker-open: OptionPickerOverlay {
+        width: parent.width;
+        height: parent.height;
+        title: root.picker-title;
+        options: root.picker-options;
+        selected-index: root.picker-index;
+        close => {
+            root.picker-open = false;
+        }
+        selected(index, label) => {
+            root.apply-picker-selection(root.picker-kind, index, label);
+        }
+    }
+}

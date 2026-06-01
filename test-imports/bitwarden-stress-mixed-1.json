@@ -1,0 +1,116 @@
+{
+  "encrypted": false,
+  "folders": [
+    {
+      "id": "folder-finance",
+      "name": "Finance"
+    },
+    {
+      "id": "folder-travel",
+      "name": "Travel"
+    },
+    {
+      "id": "folder-developer",
+      "name": "Developer"
+    }
+  ],
+  "items": [
+    {
+      "type": 1,
+      "name": "Foundation Developer Login",
+      "notes": "Existing-ish item for duplicate review testing.",
+      "favorite": true,
+      "folderId": "folder-developer",
+      "reprompt": 1,
+      "login": {
+        "username": "alex@example.com",
+        "password": "correct horse battery staple",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://developer.foundation.xyz",
+            "match": null
+          }
+        ]
+      },
+      "fields": [
+        {
+          "name": "Recovery answer",
+          "value": "blue mug",
+          "type": 1
+        },
+        {
+          "name": "Migrated",
+          "value": "true",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "type": 2,
+      "name": "Home Safe Combination",
+      "notes": "Dial left twice to 20, right to 44, left to 17.\nBackup key is in the bank box.",
+      "favorite": false,
+      "folderId": "folder-finance",
+      "reprompt": 1,
+      "secureNote": {
+        "type": 0
+      },
+      "fields": [
+        {
+          "name": "Location",
+          "value": "Closet safe",
+          "type": 0
+        },
+        {
+          "name": "Backup verified",
+          "value": "false",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "type": 3,
+      "name": "Travel Rewards Visa",
+      "notes": "Use only for travel bookings.",
+      "favorite": true,
+      "folderId": "folder-travel",
+      "reprompt": 0,
+      "card": {
+        "cardholderName": "Example User",
+        "brand": "Visa",
+        "number": "4111111111111111",
+        "expMonth": "08",
+        "expYear": "2031",
+        "code": "123"
+      },
+      "fields": [
+        {
+          "name": "Support PIN",
+          "value": "2468",
+          "type": 1
+        }
+      ]
+    },
+    {
+      "type": 5,
+      "name": "GitHub Deploy SSH Key",
+      "notes": "Key used for deploy-only automation.",
+      "favorite": false,
+      "folderId": "folder-developer",
+      "reprompt": 1,
+      "sshKey": {
+        "privateKey": "-----BEGIN OPENSSH PRIVATE KEY-----\nstress-test-key-one\n-----END OPENSSH PRIVATE KEY-----",
+        "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAITestStressOne deploy@example",
+        "keyFingerprint": "SHA256:stressTestOne"
+      },
+      "fields": [
+        {
+          "name": "Rotates annually",
+          "value": "true",
+          "type": 2
+        }
+      ]
+    }
+  ]
+}

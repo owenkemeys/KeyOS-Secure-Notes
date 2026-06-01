@@ -1,0 +1,167 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "title": "Foundation Developer Login",
+      "category": "Login",
+      "body": "",
+      "tags": ["work", "developer"],
+      "folder": "Work",
+      "favorite": true,
+      "updated_label": "Seed",
+      "updated_rank": 10,
+      "item_type": 1,
+      "notes": "Developer account used for app testing.",
+      "login": {
+        "username": "developer@foundationdevices.com",
+        "password": "dev-login-example",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://developer.foundation.xyz",
+            "match": null
+          }
+        ]
+      },
+      "secure_note": { "type": 0 },
+      "card": {},
+      "identity": {},
+      "sshKey": null,
+      "fields": [
+        {
+          "name": "Security Question",
+          "value": "first hardware wallet",
+          "type": 1
+        }
+      ],
+      "archived": false,
+      "pin_required": false
+    },
+    {
+      "id": 2,
+      "title": "Safe Combination",
+      "category": "Secure Note",
+      "body": "",
+      "tags": ["home", "important"],
+      "folder": "Home",
+      "favorite": false,
+      "updated_label": "Seed",
+      "updated_rank": 9,
+      "item_type": 2,
+      "notes": "Combination: 12-34-56\nLocation: hallway safe",
+      "login": {},
+      "secure_note": { "type": 0 },
+      "card": {},
+      "identity": {},
+      "sshKey": null,
+      "fields": [
+        {
+          "name": "Fire rated",
+          "value": "true",
+          "type": 2
+        }
+      ],
+      "archived": false,
+      "pin_required": true
+    },
+    {
+      "id": 3,
+      "title": "Passport",
+      "category": "Identity",
+      "body": "",
+      "tags": ["travel", "id"],
+      "folder": "Travel",
+      "favorite": false,
+      "updated_label": "Seed",
+      "updated_rank": 8,
+      "item_type": 4,
+      "notes": "",
+      "login": {},
+      "secure_note": { "type": 0 },
+      "card": {},
+      "identity": {
+        "title": null,
+        "firstName": "Alex",
+        "middleName": null,
+        "lastName": "Example",
+        "username": null,
+        "company": null,
+        "ssn": null,
+        "passportNumber": "X1234567",
+        "licenseNumber": null,
+        "email": null,
+        "phone": null,
+        "address1": null,
+        "address2": null,
+        "address3": null,
+        "city": null,
+        "state": null,
+        "postalCode": null,
+        "country": "Exampleland"
+      },
+      "sshKey": null,
+      "fields": [],
+      "archived": false,
+      "pin_required": false
+    },
+    {
+      "id": 4,
+      "title": "Sample Insurance",
+      "category": "Secure Note",
+      "body": "",
+      "tags": ["car", "policy"],
+      "folder": "Vehicle",
+      "favorite": false,
+      "updated_label": "Seed",
+      "updated_rank": 7,
+      "item_type": 2,
+      "notes": "Provider: Example Mutual\nPolicy: AUTO-000-123\nRoadside: 800-555-0100",
+      "login": {},
+      "secure_note": { "type": 0 },
+      "card": {},
+      "identity": {},
+      "sshKey": null,
+      "fields": [],
+      "archived": false,
+      "pin_required": false
+    },
+    {
+      "id": 5,
+      "title": "IRS online account",
+      "category": "Login",
+      "body": "",
+      "tags": ["tax", "imported"],
+      "folder": "Finance",
+      "favorite": false,
+      "updated_label": "Seed",
+      "updated_rank": 6,
+      "item_type": 1,
+      "notes": "Annual tax portal login.",
+      "login": {
+        "username": "alex@example.com",
+        "password": "tax-login-example",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://www.irs.gov",
+            "match": null
+          }
+        ]
+      },
+      "secure_note": { "type": 0 },
+      "card": {},
+      "identity": {},
+      "sshKey": null,
+      "fields": [
+        {
+          "name": "Security Question",
+          "value": "name of first street",
+          "type": 1
+        }
+      ],
+      "archived": false,
+      "pin_required": false
+    }
+  ],
+  "next_id": 6
+}

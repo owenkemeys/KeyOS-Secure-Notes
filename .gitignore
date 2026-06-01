@@ -1,0 +1,26 @@
+# Build outputs
+target/
+**/target/
+
+# Local simulator/build logs
+*.log
+foundation-*-sim.log
+secure-notes-restart.log
+
+# Local screenshots and review captures
+*.png
+sim_screenshots/
+
+# Archived local experiment snapshots
+archive/
+*.tgz
+
+# Python cache from FAT image helper scripts
+__pycache__/
+*.pyc
+
+# Local/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

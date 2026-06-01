@@ -1,0 +1,126 @@
+{
+  "encrypted": false,
+  "folders": [
+    {
+      "id": "folder-identity",
+      "name": "Identity"
+    },
+    {
+      "id": "folder-insurance",
+      "name": "Insurance"
+    },
+    {
+      "id": "folder-tax",
+      "name": "Tax"
+    }
+  ],
+  "items": [
+    {
+      "type": 4,
+      "name": "Passport Details",
+      "notes": "Duplicate-ish name for existing passport record matching.",
+      "favorite": true,
+      "folderId": "folder-identity",
+      "reprompt": 1,
+      "identity": {
+        "title": null,
+        "firstName": "Alex",
+        "middleName": null,
+        "lastName": "Example",
+        "username": null,
+        "company": null,
+        "ssn": null,
+        "passportNumber": "X1234567",
+        "licenseNumber": null,
+        "email": "alex@example.com",
+        "phone": "+1 555 0100",
+        "address1": null,
+        "address2": null,
+        "address3": null,
+        "city": null,
+        "state": null,
+        "postalCode": null,
+        "country": "Exampleland"
+      },
+      "fields": [
+        {
+          "name": "Renewal reminder",
+          "value": "2031-10-01",
+          "type": 0
+        }
+      ]
+    },
+    {
+      "type": 2,
+      "name": "Sample Insurance",
+      "notes": "Provider: Example Mutual\nPolicy: AUTO-000-123\nRoadside: 800-555-0100",
+      "favorite": false,
+      "folderId": "folder-insurance",
+      "reprompt": 0,
+      "secureNote": {
+        "type": 0
+      },
+      "fields": [
+        {
+          "name": "Agent",
+          "value": "Casey",
+          "type": 0
+        },
+        {
+          "name": "Claim PIN",
+          "value": "9090",
+          "type": 1
+        }
+      ]
+    },
+    {
+      "type": 1,
+      "name": "IRS Online Account",
+      "notes": "Contains sensitive tax login details.",
+      "favorite": true,
+      "folderId": "folder-tax",
+      "reprompt": 1,
+      "login": {
+        "username": "alex.tax@example.com",
+        "password": "tax-stress-test-password",
+        "totp": "otpauth://totp/IRS:alex?secret=JBSWY3DPEHPK3PXP&issuer=IRS",
+        "uris": [
+          {
+            "uri": "https://www.irs.gov/payments/your-online-account",
+            "match": null
+          }
+        ]
+      },
+      "fields": [
+        {
+          "name": "Security question",
+          "value": "first bike",
+          "type": 1
+        },
+        {
+          "name": "Paper backup filed",
+          "value": "true",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "type": 2,
+      "name": "Warranty Folder Index",
+      "notes": "Laptop serial: PRIME-LAP-2026\nCamera serial: CAM-555-000\nKeep receipts in Tax folder.",
+      "favorite": false,
+      "folderId": "folder-tax",
+      "reprompt": 0,
+      "secureNote": {
+        "type": 0
+      },
+      "fields": [
+        {
+          "name": "Receipt location",
+          "value": "Paper archive box 2",
+          "type": 0
+        }
+      ]
+    }
+  ]
+}

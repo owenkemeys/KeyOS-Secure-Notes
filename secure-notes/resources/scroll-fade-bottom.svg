@@ -1,0 +1,10 @@
+<svg width="480" height="128" viewBox="0 0 480 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="128" fill="url(#fade_bottom)"/>
+<defs>
+<linearGradient id="fade_bottom" x1="240" y1="0" x2="240" y2="128" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F6F6F6" stop-opacity="0"/>
+<stop offset="0.62" stop-color="#F6F6F6"/>
+<stop offset="1" stop-color="#F6F6F6"/>
+</linearGradient>
+</defs>
+</svg>

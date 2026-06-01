@@ -1,0 +1,180 @@
+{
+    "generated_by":  "Codex",
+    "purpose":  "Records Figma provenance for Secure Notes icon assets so they can be refreshed without guessing.",
+    "source_csv":  "Icons for Secure Notes - Sheet1.csv",
+    "figma_file":  {
+                       "name":  "Design System - Icons",
+                       "key":  "Pi4ZVtxn8uvRw00S8n84u2"
+                   },
+    "assets":  [
+                   {
+                       "role":  "item-login",
+                       "local_asset":  "item-login.svg",
+                       "node_id":  "36:538",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=36-538\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "item-secure-note",
+                       "local_asset":  "item-secure-note.svg",
+                       "node_id":  "2446:421497",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=2446-421497\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "item-payment-card",
+                       "local_asset":  "item-payment-card.svg",
+                       "node_id":  "10943:213",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=10943-213\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "item-identity",
+                       "local_asset":  "item-identity.svg",
+                       "node_id":  "10338:160",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=10338-160\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "item-ssh-key",
+                       "local_asset":  "item-ssh-key.svg",
+                       "node_id":  "4326:528934",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=4326-528934\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "pin-required",
+                       "local_asset":  "pin-required.svg",
+                       "node_id":  "3643:163456",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=3643-163456\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "chevron-right",
+                       "local_asset":  "chevron-right.svg",
+                       "node_id":  "36:395",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=36-395\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "filter-sliders",
+                       "local_asset":  "filter-sliders.svg",
+                       "node_id":  "144:687",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=144-687\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "search",
+                       "local_asset":  "search.svg",
+                       "node_id":  "818:188",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=818-188\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "clear-x",
+                       "local_asset":  "clear-x.svg",
+                       "node_id":  "10288:153",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=10288-153\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "ellipsis",
+                       "local_asset":  "ellipsis.svg",
+                       "node_id":  "36:433",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=36-433\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "plus",
+                       "local_asset":  "plus.svg",
+                       "node_id":  "831:29",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=831-29\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "import",
+                       "local_asset":  "import.svg",
+                       "node_id":  "10225:105751",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=10225-105751\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "archive-box",
+                       "local_asset":  "archive-box.svg",
+                       "node_id":  "5956:130844",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=5956-130844\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "back",
+                       "local_asset":  "back.svg",
+                       "node_id":  "36:387",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=36-387\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "chevron-down",
+                       "local_asset":  "chevron-down.svg",
+                       "node_id":  "36:383",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=36-383\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "edit-pencil",
+                       "local_asset":  "edit-pencil.svg",
+                       "node_id":  "2446:421618",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=2446-421618\u0026t=xqFluZKGfs5JfwX5-4"
+                   },
+                   {
+                       "role":  "favorite-star-outline",
+                       "local_asset":  "favorite-star-outline.svg",
+                       "node_id":  "4179:122110",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=4179-122110\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "favorite-star-filled",
+                       "local_asset":  "favorite-star-filled.svg",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=4179-122110\u0026t=qBg1WOl6uC7YyHgN-4",
+                       "node_id":  "4179:122110",
+                       "notes":  "Unused placeholder while favorite UI is hidden; mirrors the exact outline master because no filled master is selected."
+                   },
+                   {
+                       "role":  "import-hero",
+                       "local_asset":  "import-hero.svg",
+                       "derived_from":  "import",
+                       "notes":  "Derived hero artwork; excluded from the exact small-icon restore set."
+                   },
+                   {
+                       "role":  "import-success",
+                       "local_asset":  "import-success.svg",
+                       "node_id":  "36:543",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=36-543\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "import-skipped",
+                       "local_asset":  "import-skipped.svg",
+                       "node_id":  "4630:19728",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=4630-19728\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "import-failed",
+                       "local_asset":  "import-failed.svg",
+                       "node_id":  "248:905",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=248-905\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "eye-visible",
+                       "local_asset":  "eye-visible.svg",
+                       "node_id":  "4967:105",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=4967-105\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "eye-hidden",
+                       "local_asset":  "eye-hidden.svg",
+                       "node_id":  "4967:107",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=4967-107\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "folder",
+                       "local_asset":  "folder.svg",
+                       "node_id":  "1704:2810",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=1704-2810\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "sort-descending",
+                       "local_asset":  "sort-descending.svg",
+                       "node_id":  "224:1133",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=224-1133\u0026t=qBg1WOl6uC7YyHgN-4"
+                   },
+                   {
+                       "role":  "sort-ascending",
+                       "local_asset":  "sort-ascending.svg",
+                       "node_id":  "10965:4220",
+                       "source_url":  "https://www.figma.com/design/Pi4ZVtxn8uvRw00S8n84u2/Design-System---Icons?node-id=10965-4220\u0026t=qBg1WOl6uC7YyHgN-4"
+                   }
+               ]
+}

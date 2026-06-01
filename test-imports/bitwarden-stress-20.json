@@ -1,0 +1,294 @@
+{
+  "encrypted": false,
+  "folders": [
+    { "id": "folder-finance", "name": "Finance" },
+    { "id": "folder-home", "name": "Home" },
+    { "id": "folder-travel", "name": "Travel" },
+    { "id": "folder-work", "name": "Work" },
+    { "id": "folder-vehicle", "name": "Vehicle" },
+    { "id": "folder-medical", "name": "Medical" }
+  ],
+  "items": [
+    {
+      "type": 1,
+      "name": "Foundation Developer Portal Login",
+      "notes": "Intentional fuzzy match to the existing Foundation Developer Login.",
+      "favorite": true,
+      "folderId": "folder-work",
+      "reprompt": 1,
+      "login": {
+        "username": "developer@foundationdevices.com",
+        "password": "dev-login-example-v2",
+        "totp": null,
+        "uris": [{ "uri": "https://developer.foundation.xyz", "match": null }]
+      },
+      "fields": [
+        { "name": "Security Question", "value": "first hardware wallet", "type": 1 },
+        { "name": "Reviewed", "value": "true", "type": 2 }
+      ]
+    },
+    {
+      "type": 2,
+      "name": "Home Safe Combo",
+      "notes": "Intentional fuzzy match to Safe Combination.\nCombination: 12-34-56\nBackup key: bank box.",
+      "favorite": false,
+      "folderId": "folder-home",
+      "reprompt": 1,
+      "secureNote": { "type": 0 },
+      "fields": [
+        { "name": "Fire rated", "value": "true", "type": 2 },
+        { "name": "Install date", "value": "2022-08", "type": 0 }
+      ]
+    },
+    {
+      "type": 4,
+      "name": "Passport Renewal",
+      "notes": "Intentional fuzzy match to Passport.",
+      "favorite": false,
+      "folderId": "folder-travel",
+      "reprompt": 0,
+      "identity": {
+        "firstName": "Alex",
+        "lastName": "Example",
+        "passportNumber": "X1234567",
+        "country": "Exampleland"
+      },
+      "fields": [{ "name": "Expires soon", "value": "false", "type": 2 }]
+    },
+    {
+      "type": 2,
+      "name": "Sample Auto Insurance Policy",
+      "notes": "Intentional fuzzy match to Sample Insurance.\nProvider: Example Mutual\nPolicy: AUTO-000-123",
+      "favorite": false,
+      "folderId": "folder-vehicle",
+      "reprompt": 0,
+      "secureNote": { "type": 0 },
+      "fields": [{ "name": "Roadside enabled", "value": "true", "type": 2 }]
+    },
+    {
+      "type": 1,
+      "name": "IRS online portal",
+      "notes": "Intentional fuzzy match to IRS online account.",
+      "favorite": false,
+      "folderId": "folder-finance",
+      "reprompt": 1,
+      "login": {
+        "username": "alex@example.com",
+        "password": "tax-login-example-2026",
+        "totp": null,
+        "uris": [{ "uri": "https://www.irs.gov", "match": null }]
+      },
+      "fields": [{ "name": "Security Question", "value": "name of first street", "type": 1 }]
+    },
+    {
+      "type": 3,
+      "name": "Everyday Visa",
+      "notes": "Primary household card.",
+      "favorite": true,
+      "folderId": "folder-finance",
+      "reprompt": 1,
+      "card": {
+        "cardholderName": "Example User",
+        "number": "4111111111111111",
+        "expMonth": "08",
+        "expYear": "2030",
+        "code": "123",
+        "brand": "Visa"
+      },
+      "fields": [{ "name": "Autopay", "value": "true", "type": 2 }]
+    },
+    {
+      "type": 3,
+      "name": "Travel Mastercard",
+      "notes": "Use for hotel holds and travel insurance.",
+      "favorite": false,
+      "folderId": "folder-travel",
+      "reprompt": 0,
+      "card": {
+        "cardholderName": "Example User",
+        "number": "5555555555554444",
+        "expMonth": "02",
+        "expYear": "2031",
+        "code": "456",
+        "brand": "Mastercard"
+      },
+      "fields": [{ "name": "No foreign fees", "value": "true", "type": 2 }]
+    },
+    {
+      "type": 2,
+      "name": "Medical Insurance",
+      "notes": "Provider: Example Health\nMember: H123456789\nGroup: G-2026",
+      "favorite": false,
+      "folderId": "folder-medical",
+      "reprompt": 0,
+      "secureNote": { "type": 0 },
+      "fields": [
+        { "name": "Telehealth PIN", "value": "7421", "type": 1 },
+        { "name": "HSA eligible", "value": "true", "type": 2 }
+      ]
+    },
+    {
+      "type": 2,
+      "name": "Home Alarm",
+      "notes": "Monitoring ID: ALARM-90210\nDuress word: bluebird",
+      "favorite": false,
+      "folderId": "folder-home",
+      "reprompt": 1,
+      "secureNote": { "type": 0 },
+      "fields": [{ "name": "Police dispatch", "value": "true", "type": 2 }]
+    },
+    {
+      "type": 2,
+      "name": "Vehicle Registration",
+      "notes": "VIN: PRIMEVIN000001\nPlate: KEYOS-26\nRenewal: 2026-11",
+      "favorite": false,
+      "folderId": "folder-vehicle",
+      "reprompt": 0,
+      "secureNote": { "type": 0 },
+      "fields": [{ "name": "Smog needed", "value": "false", "type": 2 }]
+    },
+    {
+      "type": 1,
+      "name": "Mortgage Portal",
+      "notes": "Loan servicing portal.",
+      "favorite": false,
+      "folderId": "folder-finance",
+      "reprompt": 1,
+      "login": {
+        "username": "alex@example.com",
+        "password": "mortgage-example",
+        "totp": null,
+        "uris": [{ "uri": "https://mortgage.example.com", "match": null }]
+      },
+      "fields": [{ "name": "Loan suffix", "value": "0007", "type": 1 }]
+    },
+    {
+      "type": 1,
+      "name": "Utility Account",
+      "notes": "Electric and water account.",
+      "favorite": false,
+      "folderId": "folder-home",
+      "reprompt": 0,
+      "login": {
+        "username": "utilities@example.com",
+        "password": "utility-example",
+        "totp": null,
+        "uris": [{ "uri": "https://utility.example.com", "match": null }]
+      },
+      "fields": [{ "name": "Paperless billing", "value": "true", "type": 2 }]
+    },
+    {
+      "type": 4,
+      "name": "Driver License",
+      "notes": "Keep renewal reminder active.",
+      "favorite": false,
+      "folderId": "folder-travel",
+      "reprompt": 0,
+      "identity": {
+        "firstName": "Alex",
+        "lastName": "Example",
+        "licenseNumber": "D1234567",
+        "address1": "123 Example Street",
+        "city": "Austin",
+        "state": "TX",
+        "postalCode": "78701",
+        "country": "US"
+      },
+      "fields": [{ "name": "REAL ID", "value": "true", "type": 2 }]
+    },
+    {
+      "type": 4,
+      "name": "Child Passport",
+      "notes": "Consent form required for renewal.",
+      "favorite": false,
+      "folderId": "folder-travel",
+      "reprompt": 1,
+      "identity": {
+        "firstName": "Alex",
+        "lastName": "Example",
+        "passportNumber": "C9876543",
+        "country": "US"
+      },
+      "fields": [{ "name": "Guardian consent stored", "value": "false", "type": 2 }]
+    },
+    {
+      "type": 5,
+      "name": "GitHub Deploy SSH Key",
+      "notes": "Test SSH key import.",
+      "favorite": false,
+      "folderId": "folder-work",
+      "reprompt": 1,
+      "sshKey": {
+        "privateKey": "-----BEGIN OPENSSH PRIVATE KEY-----\nexample-key-material\n-----END OPENSSH PRIVATE KEY-----",
+        "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAITestKey secure-notes-test",
+        "keyFingerprint": "SHA256:examplefingerprint"
+      },
+      "fields": [{ "name": "Rotated", "value": "false", "type": 2 }]
+    },
+    {
+      "type": 5,
+      "name": "Home Server SSH Key",
+      "notes": "Local admin SSH key.",
+      "favorite": false,
+      "folderId": "folder-home",
+      "reprompt": 1,
+      "sshKey": {
+        "privateKey": "-----BEGIN OPENSSH PRIVATE KEY-----\nexample-home-key\n-----END OPENSSH PRIVATE KEY-----",
+        "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHomeKey secure-notes-home",
+        "keyFingerprint": "SHA256:homeexamplefingerprint"
+      },
+      "fields": [{ "name": "Passphrase hint", "value": "small black notebook", "type": 1 }]
+    },
+    {
+      "type": 2,
+      "name": "Bike Serial Number",
+      "notes": "Serial: BIKE-2026-0001\nFrame: matte black",
+      "favorite": false,
+      "folderId": "folder-home",
+      "reprompt": 0,
+      "secureNote": { "type": 0 },
+      "fields": [{ "name": "Registered", "value": "true", "type": 2 }]
+    },
+    {
+      "type": 2,
+      "name": "Pet Microchip",
+      "notes": "Chip: 985112000000001\nRegistry phone: 800-555-0144",
+      "favorite": false,
+      "folderId": "folder-medical",
+      "reprompt": 0,
+      "secureNote": { "type": 0 },
+      "fields": [{ "name": "Annual check", "value": "2026-04", "type": 0 }]
+    },
+    {
+      "type": 1,
+      "name": "Cloud Backup Account",
+      "notes": "Recovery codes stored offline.",
+      "favorite": true,
+      "folderId": "folder-work",
+      "reprompt": 1,
+      "login": {
+        "username": "backup@example.com",
+        "password": "cloud-backup-example",
+        "totp": null,
+        "uris": [{ "uri": "https://backup.example.com", "match": null }]
+      },
+      "fields": [
+        { "name": "Recovery code 1", "value": "ABCD-EFGH", "type": 1 },
+        { "name": "Emergency access enabled", "value": "true", "type": 2 }
+      ]
+    },
+    {
+      "type": 2,
+      "name": "Bank Safe Deposit Box",
+      "notes": "Branch: downtown\nBox: 042\nKey tag: silver",
+      "favorite": true,
+      "folderId": "folder-finance",
+      "reprompt": 1,
+      "secureNote": { "type": 0 },
+      "fields": [
+        { "name": "Joint holder", "value": "Yes", "type": 0 },
+        { "name": "Inventory reviewed", "value": "false", "type": 2 }
+      ]
+    }
+  ]
+}

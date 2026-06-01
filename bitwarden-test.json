@@ -1,0 +1,64 @@
+{
+  "encrypted": false,
+  "folders": [],
+  "items": [
+    {
+      "type": 1,
+      "name": "Foundation Developer Login",
+      "notes": "Fake login for import testing only.",
+      "login": {
+        "username": "alex.test@example.com",
+        "password": "correct-horse-demo-42",
+        "uris": [
+          {
+            "uri": "https://foundationdevices.com"
+          }
+        ]
+      },
+      "fields": [
+        {
+          "name": "Recovery email",
+          "value": "backup.test@example.com",
+          "type": 0
+        }
+      ]
+    },
+    {
+      "type": 2,
+      "name": "Safe Combination",
+      "notes": "Combination: 12-34-56\nLocation: Upstairs closet\nUpdated: 2026-05-27",
+      "secureNote": {
+        "type": 0
+      }
+    },
+    {
+      "type": 3,
+      "name": "Test Visa Card",
+      "notes": "Dummy card. Do not use.",
+      "card": {
+        "cardholderName": "Example User",
+        "brand": "Visa",
+        "number": "4111111111111111",
+        "expMonth": "12",
+        "expYear": "2030",
+        "code": "123"
+      }
+    },
+    {
+      "type": 4,
+      "name": "Test Passport Identity",
+      "notes": "Fake identity record.",
+      "identity": {
+        "firstName": "Alex",
+        "lastName": "Example",
+        "address1": "123 Test Street",
+        "city": "Austin",
+        "state": "TX",
+        "postalCode": "78701",
+        "country": "US",
+        "passportNumber": "X1234567",
+        "ssn": "123-45-6789"
+      }
+    }
+  ]
+}
