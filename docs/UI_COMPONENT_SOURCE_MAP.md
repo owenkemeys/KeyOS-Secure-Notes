@@ -7,6 +7,7 @@ This document records the starting point for replacing Secure Notes' hand-built 
 - App repo branch: `codex/ui-foundation-components`
 - Backup tag before refactor work: `prototype-before-ui-component-refactor`
 - Current prototype baseline commit: `8cf4c06 Prepare Secure Notes prototype handover`
+- First implementation checkpoint: `716279f Adopt public KeyOS background and UI tokens`
 - Public KeyOS source repo: `Foundation-Devices/KeyOS`
 - Public KeyOS commit pinned for this audit: `9056b4805315cad3a8dd58f7c7d06a08e27a1a31`
 
@@ -21,6 +22,20 @@ Public KeyOS UI files are marked `GPL-3.0-or-later`. Any direct source reuse mus
 - local file path
 - whether the local file is copied unchanged or adapted
 - reason for any adaptation
+
+Do not add a new `@ui/...` import only because the public KeyOS repo has that widget. First verify the installed public SDK exposes the same import path and API. If it does not, either keep the local Secure Notes wrapper for that stage or vendor the upstream file deliberately with SPDX headers intact.
+
+## Implemented Checkpoints
+
+### `716279f Adopt public KeyOS background and UI tokens`
+
+- Added official public KeyOS light and dark background PNGs from the pinned commit.
+- Added `secure-notes/resources/background-sources.json` to track upstream paths and URLs.
+- Replaced the previous local SVG background reference with the official PNG pair.
+- Updated the Secure Notes primary/accent color from the old local teal to public KeyOS `blue-500` (`#009db9`) and pressed `blue-700` (`#006f83`).
+- Updated the destructive fallback to public KeyOS `red-500` (`#ff3333`) and hardcoded notice/copper uses to `light-copper-500` (`#d68b6e`).
+- Adjusted local toggle dimensions to match the public `Switch` geometry.
+- Adjusted local ellipsis menu row dimensions toward the public `PopupMenuItem` geometry without importing unverified SDK widgets.
 
 ## Primary Upstream Sources
 
