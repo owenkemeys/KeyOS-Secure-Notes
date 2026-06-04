@@ -9,6 +9,8 @@ secure-notes-restart.log
 
 # Local screenshots and review captures
 *.png
+!secure-notes/resources/keyos-background-light.png
+!secure-notes/resources/keyos-background-dark.png
 sim_screenshots/
 
 # Archived local experiment snapshots

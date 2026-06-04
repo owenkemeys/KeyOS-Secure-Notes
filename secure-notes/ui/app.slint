@@ -261,7 +261,7 @@ component PillInput inherits Rectangle {
     border-radius: 24px;
     background: Theme.palette-secondary;
     border-width: input.has-focus || root.error != "" ? 2px : 0px;
-    border-color: root.error != "" ? #cf896f : Theme.palette-primary;
+    border-color: root.error != "" ? #d68b6e : Theme.palette-primary;
     clip: true;
 
     if root.text == "": Text {
@@ -270,7 +270,7 @@ component PillInput inherits Rectangle {
         width: parent.width - 32px;
         height: parent.height;
         text: root.placeholder;
-        color: root.error != "" ? #cf896f : Theme.palette-muted;
+        color: root.error != "" ? #d68b6e : Theme.palette-muted;
         font-family: "Montserrat";
         font-size: 20px;
         font-weight: 500;
@@ -284,7 +284,7 @@ component PillInput inherits Rectangle {
         width: parent.width - 32px;
         height: 30px;
         text <=> root.text;
-        color: root.error != "" ? #cf896f : Theme.palette-foreground;
+        color: root.error != "" ? #d68b6e : Theme.palette-foreground;
         font-family: "Montserrat";
         font-size: 20px;
         font-weight: 500;
@@ -323,7 +323,7 @@ component MultiLineInput inherits Rectangle {
     border-radius: 24px;
     background: Theme.palette-secondary;
     border-width: input.has-focus || root.error != "" ? 2px : 0px;
-    border-color: root.error != "" ? #cf896f : Theme.palette-primary;
+    border-color: root.error != "" ? #d68b6e : Theme.palette-primary;
     clip: true;
 
     if root.text == "": Text {
@@ -332,7 +332,7 @@ component MultiLineInput inherits Rectangle {
         width: parent.width - 32px;
         height: parent.height - 32px;
         text: root.placeholder;
-        color: root.error != "" ? #cf896f : Theme.palette-muted;
+        color: root.error != "" ? #d68b6e : Theme.palette-muted;
         font-family: "Montserrat";
         font-size: 20px;
         font-weight: 500;
@@ -346,7 +346,7 @@ component MultiLineInput inherits Rectangle {
         width: parent.width - 32px;
         height: parent.height - 32px;
         text <=> root.text;
-        color: root.error != "" ? #cf896f : Theme.palette-foreground;
+        color: root.error != "" ? #d68b6e : Theme.palette-foreground;
         font-family: "Montserrat";
         font-size: 20px;
         font-weight: 500;
@@ -829,19 +829,19 @@ component InlineToggle inherits Rectangle {
     in property <bool> interactive: true;
     callback toggled(bool);
 
-    width: 58px;
-    height: 34px;
-    border-radius: 17px;
+    width: 56px;
+    height: 28px;
+    border-radius: 14px;
     background: root.checked ? Theme.palette-primary : Theme.palette-secondary;
     border-width: 1px;
     border-color: Theme.palette-border;
 
     Rectangle {
-        x: root.checked ? parent.width - self.width - 4px : 4px;
-        y: 4px;
-        width: 26px;
-        height: 26px;
-        border-radius: 13px;
+        x: root.checked ? parent.width - self.width - 2px : 2px;
+        y: 2px;
+        width: 24px;
+        height: 24px;
+        border-radius: 12px;
         background: white;
     }
 
@@ -858,7 +858,7 @@ component ErrorText inherits Text {
 
     height: root.message == "" ? 0px : 26px;
     text: root.message;
-    color: #cf896f;
+    color: #d68b6e;
     font-family: "Montserrat";
     font-size: 20px;
     font-weight: 500;
@@ -1131,7 +1131,7 @@ component ImportReviewRow inherits Rectangle {
     border-radius: 14px;
     background: Theme.palette-surface;
     border-width: 1px;
-    border-color: root.similar-to == "" ? Theme.palette-border : #cf896f;
+    border-color: root.similar-to == "" ? Theme.palette-border : #d68b6e;
     clip: true;
 
     Rectangle {
@@ -1181,7 +1181,7 @@ component ImportReviewRow inherits Rectangle {
 
         if root.similar-to != "": Text {
             text: "Similar to: \"" + root.similar-to + "\"";
-            color: #cf896f;
+            color: #d68b6e;
             font-family: "Montserrat";
             font-size: 14px;
             font-weight: 600;
@@ -1306,14 +1306,15 @@ component MenuItem inherits Rectangle {
     in property <string> icon;
     callback clicked();
 
-    height: 73px;
+    height: 64px;
     background: touch.pressed ? Theme.palette-surface : Theme.palette-background;
 
     HorizontalLayout {
         width: parent.width;
         height: parent.height;
-        padding-left: 30px;
-        padding-right: 18px;
+        spacing: 16px;
+        padding-left: 16px;
+        padding-right: 16px;
 
         Text {
             text: root.label;
@@ -1325,18 +1326,19 @@ component MenuItem inherits Rectangle {
             horizontal-stretch: 1;
         }
 
-        Rectangle {
-            width: 48px;
-            height: parent.height;
-            background: transparent;
+        VerticalLayout {
+            width: 32px;
+            alignment: center;
+            horizontal-stretch: 0;
 
-            Image {
-                x: (parent.width - self.width) / 2;
-                y: (parent.height - self.height) / 2;
-                width: 24px;
-                height: 24px;
-                source: root.icon == "plus" ? @image-url("../resources/icons/plus.svg") : (root.icon == "import" ? @image-url("../resources/icons/import.svg") : @image-url("../resources/icons/archive-box.svg"));
-                image-fit: contain;
+            HorizontalLayout {
+                alignment: center;
+                Image {
+                    width: 24px;
+                    height: 24px;
+                    source: root.icon == "plus" ? @image-url("../resources/icons/plus.svg") : (root.icon == "import" ? @image-url("../resources/icons/import.svg") : @image-url("../resources/icons/archive-box.svg"));
+                    image-fit: contain;
+                }
             }
         }
     }
@@ -1467,7 +1469,7 @@ component MenuOverlay inherits Rectangle {
         x: 30px;
         y: 74px + UISize.control-center-status-bar-height;
         width: parent.width - 60px;
-        height: 222px;
+        height: 194px;
         border-radius: 22px;
         background: Theme.palette-background;
         border-width: 1px;
@@ -1486,17 +1488,17 @@ component MenuOverlay inherits Rectangle {
                 icon: "plus";
                 clicked => { root.new-item(); }
             }
-            Divider { y: 73px; width: 100%; }
+            Divider { y: 64px; width: 100%; }
             MenuItem {
-                y: 74px;
+                y: 65px;
                 width: 100%;
                 label: "Import";
                 icon: "import";
                 clicked => { root.import-file(); }
             }
-            Divider { y: 147px; width: 100%; }
+            Divider { y: 129px; width: 100%; }
             MenuItem {
-                y: 148px;
+                y: 130px;
                 width: 100%;
                 label: "View Archive";
                 icon: "archive";
@@ -1708,7 +1710,7 @@ component EditFieldOverlay inherits Rectangle {
             if root.confirm-delete: Text {
                 height: 62px;
                 text: "Delete this custom field? This cannot be undone.";
-                color: #cf896f;
+                color: #d68b6e;
                 font-family: "Montserrat";
                 font-size: 18px;
                 font-weight: 700;
@@ -2343,7 +2345,14 @@ export component AppWindow inherits Window {
     if !Theme.is-dark: Image {
         width: parent.width;
         height: parent.height;
-        source: @image-url("../resources/background-light.svg");
+        source: @image-url("../resources/keyos-background-light.png");
+        image-fit: cover;
+    }
+
+    if Theme.is-dark: Image {
+        width: parent.width;
+        height: parent.height;
+        source: @image-url("../resources/keyos-background-dark.png");
         image-fit: cover;
     }
 

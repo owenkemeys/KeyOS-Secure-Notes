@@ -43,14 +43,14 @@ fn apply_theme(ui: &crate::AppWindow, theme: &ExportTheme, scheme: ColorScheme) 
         scheme,
         "color",
         "primary",
-        slint_keyos_platform::slint::Color::from_rgb_u8(0, 117, 128),
+        slint_keyos_platform::slint::Color::from_rgb_u8(0, 157, 185),
     ));
     theme_global.set_palette_primary_pressed(token_color(
         theme,
         scheme,
         "color",
         "primary.dark",
-        slint_keyos_platform::slint::Color::from_rgb_u8(0, 87, 96),
+        slint_keyos_platform::slint::Color::from_rgb_u8(0, 111, 131),
     ));
     theme_global.set_palette_secondary(token_color(
         theme,
@@ -71,7 +71,7 @@ fn apply_theme(ui: &crate::AppWindow, theme: &ExportTheme, scheme: ColorScheme) 
         scheme,
         "color",
         "danger",
-        slint_keyos_platform::slint::Color::from_rgb_u8(204, 42, 42),
+        slint_keyos_platform::slint::Color::from_rgb_u8(255, 51, 51),
     ));
     theme_global.set_palette_surface(token_color(
         theme,

@@ -1,0 +1,21 @@
+{
+  "generated_by": "Codex",
+  "purpose": "Records public KeyOS provenance for Secure Notes background assets.",
+  "source_repo": "Foundation-Devices/KeyOS",
+  "source_commit": "9056b4805315cad3a8dd58f7c7d06a08e27a1a31",
+  "license": "GPL-3.0-or-later",
+  "assets": [
+    {
+      "role": "keyos-background-light",
+      "local_asset": "keyos-background-light.png",
+      "upstream_path": "ui/ui/images/background.png",
+      "source_url": "https://github.com/Foundation-Devices/KeyOS/blob/9056b4805315cad3a8dd58f7c7d06a08e27a1a31/ui/ui/images/background.png"
+    },
+    {
+      "role": "keyos-background-dark",
+      "local_asset": "keyos-background-dark.png",
+      "upstream_path": "ui/ui/images/background-dark.png",
+      "source_url": "https://github.com/Foundation-Devices/KeyOS/blob/9056b4805315cad3a8dd58f7c7d06a08e27a1a31/ui/ui/images/background-dark.png"
+    }
+  ]
+}

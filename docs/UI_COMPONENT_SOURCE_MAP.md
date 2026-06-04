@@ -28,6 +28,7 @@ Public KeyOS UI files are marked `GPL-3.0-or-later`. Any direct source reuse mus
 | --- | --- |
 | Theme tokens, palette, button colors | `ui/ui/theme.slint` |
 | Background, icon, image callbacks | `ui/ui/images.slint` |
+| Light and dark app background assets | `ui/ui/images/background.png`, `ui/ui/images/background-dark.png` |
 | Button | `ui/ui/widgets/button.slint` |
 | Icon button | `ui/ui/widgets/icon-button.slint` |
 | Icon loading and sizing | `ui/ui/widgets/icon.slint` |
@@ -90,7 +91,7 @@ This is the root cause of repeated visual drift: the app imports some SDK contro
 
 | Secure Notes area | Current local implementation | Recommended source of truth | Refactor action |
 | --- | --- | --- | --- |
-| Window background and keyboard defocus | Custom background image plus scattered focus sink/touch areas | `BaseWindow` and `BasePage` from `ui/ui/widgets/base-page.slint` | Replace root shell with KeyOS base primitives where SDK exposure allows. Keep custom light background only if it cannot use `Images.common("images/background")`. |
+| Window background and keyboard defocus | Custom background image plus scattered focus sink/touch areas | `BaseWindow` and `BasePage` from `ui/ui/widgets/base-page.slint`; official background assets from `ui/ui/images/` | Replace root shell with KeyOS base primitives where SDK exposure allows. Use the official public light/dark KeyOS background assets instead of the local reverse-engineered SVG. |
 | Page headers and back/menu actions | Hand-positioned title plus `GlyphButton` | `AppHeader`, `NavHeader`, `IconButton` | Replace hand-positioned headers. Use real `chevron-left`, `ellipsis`, and action icons through `IconButton`. |
 | Primary/secondary/destructive buttons | `ActionButton` with local colors/radius | `Button` | Replace with `Button` using `Importance.primary`, `secondary`, and `negative`. |
 | Text inputs | `PillInput` and ad hoc error labels | `Input` and `TitledInput` | Replace single-line fields. This brings focus border, clear button, error/notice messaging, password mode, and accepted behavior into the official component. |
@@ -149,4 +150,3 @@ Target behavior:
 - If vendoring is required, should copied GPL UI files live under a clearly named `secure-notes/ui/upstream_keyos/` folder with source headers intact?
 - Should the app use the public KeyOS icon names through `Images.icon`, or keep the existing local Figma-selected SVG manifest until Foundation designers provide app-specific icon names?
 - Is Secure Notes expected to remain a standalone prototype repo, or eventually move into the public KeyOS app tree where imports can become native and updates propagate automatically?
-
