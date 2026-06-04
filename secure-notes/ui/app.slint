@@ -387,6 +387,8 @@ component SearchInput inherits Rectangle {
     height: 56px;
     border-radius: 24px;
     background: Theme.palette-secondary;
+    border-width: input.has-focus ? 2px : 0px;
+    border-color: Theme.palette-primary;
     clip: true;
 
     Image {
@@ -773,57 +775,6 @@ component NoteRow inherits Rectangle {
     }
 }
 
-component ToggleRow inherits Rectangle {
-    in-out property <bool> checked;
-    in property <string> label: "Require PIN to view";
-
-    height: 58px;
-    border-radius: 12px;
-    background: Theme.palette-surface;
-    border-width: 1px;
-    border-color: Theme.palette-border;
-
-    Text {
-        x: 14px;
-        y: 0px;
-        width: parent.width - 92px;
-        height: parent.height;
-        text: root.label;
-        color: Theme.palette-foreground;
-        font-family: "Montserrat";
-        font-size: 20px;
-        font-weight: 700;
-        vertical-alignment: center;
-        overflow: elide;
-    }
-
-    Rectangle {
-        x: parent.width - self.width - 12px;
-        y: (parent.height - self.height) / 2;
-        width: 58px;
-        height: 34px;
-        border-radius: 17px;
-        background: root.checked ? Theme.palette-primary : Theme.palette-secondary;
-        border-width: 1px;
-        border-color: Theme.palette-border;
-
-        Rectangle {
-            x: root.checked ? parent.width - self.width - 4px : 4px;
-            y: 4px;
-            width: 26px;
-            height: 26px;
-            border-radius: 13px;
-            background: white;
-        }
-    }
-
-    TouchArea {
-        clicked => {
-            root.checked = !root.checked;
-        }
-    }
-}
-
 component InlineToggle inherits Rectangle {
     in-out property <bool> checked;
     in property <bool> interactive: true;
@@ -849,6 +800,44 @@ component InlineToggle inherits Rectangle {
         clicked => {
             root.checked = !root.checked;
             root.toggled(root.checked);
+        }
+    }
+}
+
+component ToggleRow inherits Rectangle {
+    in-out property <bool> checked;
+    in property <string> label: "Require PIN to view";
+
+    height: 58px;
+    border-radius: 12px;
+    background: Theme.palette-surface;
+    border-width: 1px;
+    border-color: Theme.palette-border;
+
+    Text {
+        x: 14px;
+        y: 0px;
+        width: parent.width - 86px;
+        height: parent.height;
+        text: root.label;
+        color: Theme.palette-foreground;
+        font-family: "Montserrat";
+        font-size: 20px;
+        font-weight: 700;
+        vertical-alignment: center;
+        overflow: elide;
+    }
+
+    InlineToggle {
+        x: parent.width - self.width - 14px;
+        y: (parent.height - self.height) / 2;
+        checked <=> root.checked;
+        interactive: false;
+    }
+
+    TouchArea {
+        clicked => {
+            root.checked = !root.checked;
         }
     }
 }
@@ -1189,24 +1178,11 @@ component ImportReviewRow inherits Rectangle {
         }
     }
 
-    Rectangle {
+    InlineToggle {
         x: parent.width - self.width - 12px;
         y: (parent.height - self.height) / 2;
-        width: 54px;
-        height: 32px;
-        border-radius: 16px;
-        background: root.selected ? Theme.palette-primary : Theme.palette-secondary;
-        border-width: 1px;
-        border-color: Theme.palette-border;
-
-        Rectangle {
-            x: root.selected ? parent.width - self.width - 4px : 4px;
-            y: 4px;
-            width: 24px;
-            height: 24px;
-            border-radius: 12px;
-            background: white;
-        }
+        checked <=> root.selected;
+        interactive: false;
     }
 
     TouchArea {
@@ -1309,38 +1285,27 @@ component MenuItem inherits Rectangle {
     height: 64px;
     background: touch.pressed ? Theme.palette-surface : Theme.palette-background;
 
-    HorizontalLayout {
-        width: parent.width;
+    Text {
+        x: 32px;
+        y: 0px;
+        width: parent.width - 96px;
         height: parent.height;
-        spacing: 16px;
-        padding-left: 16px;
-        padding-right: 16px;
+        text: root.label;
+        color: Theme.palette-foreground;
+        font-family: "Montserrat";
+        font-size: 22px;
+        font-weight: 500;
+        vertical-alignment: center;
+        overflow: elide;
+    }
 
-        Text {
-            text: root.label;
-            color: Theme.palette-foreground;
-            font-family: "Montserrat";
-            font-size: 22px;
-            font-weight: 500;
-            vertical-alignment: center;
-            horizontal-stretch: 1;
-        }
-
-        VerticalLayout {
-            width: 32px;
-            alignment: center;
-            horizontal-stretch: 0;
-
-            HorizontalLayout {
-                alignment: center;
-                Image {
-                    width: 24px;
-                    height: 24px;
-                    source: root.icon == "plus" ? @image-url("../resources/icons/plus.svg") : (root.icon == "import" ? @image-url("../resources/icons/import.svg") : @image-url("../resources/icons/archive-box.svg"));
-                    image-fit: contain;
-                }
-            }
-        }
+    Image {
+        x: parent.width - self.width - 32px;
+        y: (parent.height - self.height) / 2;
+        width: 24px;
+        height: 24px;
+        source: root.icon == "plus" ? @image-url("../resources/icons/plus.svg") : (root.icon == "import" ? @image-url("../resources/icons/import.svg") : @image-url("../resources/icons/archive-box.svg"));
+        image-fit: contain;
     }
 
     touch := TouchArea {

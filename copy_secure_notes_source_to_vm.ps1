@@ -34,6 +34,10 @@ $required = @(
     "$Root\secure-notes\Cargo.toml",
     "$Root\secure-notes-core\src\lib.rs",
     "$Root\secure-notes-core\Cargo.toml",
+    "$Root\secure-notes\resources\keyos-background-light.png",
+    "$Root\secure-notes\resources\keyos-background-dark.png",
+    "$Root\secure-notes\resources\background-sources.json",
+    "$Root\secure-notes\resources\icon.svg",
     "$Root\secure-notes\resources\scroll-fade-top.svg",
     "$Root\secure-notes\resources\scroll-fade-bottom.svg",
     "$Root\secure-notes\resources\icons\icon-sources.json",
@@ -88,6 +92,12 @@ Write-Host "Copying fade assets..."
 & scp @scpBase "$Root\secure-notes\resources\scroll-fade-top.svg" "$Root\secure-notes\resources\scroll-fade-bottom.svg" "$remote`:/home/foundation/secure-notes/resources/"
 if ($LASTEXITCODE -ne 0) {
     throw "Fade asset copy failed"
+}
+
+Write-Host "Copying KeyOS background and app icon assets..."
+& scp @scpBase "$Root\secure-notes\resources\keyos-background-light.png" "$Root\secure-notes\resources\keyos-background-dark.png" "$Root\secure-notes\resources\background-sources.json" "$Root\secure-notes\resources\icon.svg" "$remote`:/home/foundation/secure-notes/resources/"
+if ($LASTEXITCODE -ne 0) {
+    throw "Background/app icon asset copy failed"
 }
 
 Write-Host "Copying SVG icon assets and manifest..."
