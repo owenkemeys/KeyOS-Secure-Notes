@@ -38,8 +38,6 @@ $required = @(
     "$Root\secure-notes\resources\keyos-background-dark.png",
     "$Root\secure-notes\resources\background-sources.json",
     "$Root\secure-notes\resources\icon.svg",
-    "$Root\secure-notes\resources\scroll-fade-top.svg",
-    "$Root\secure-notes\resources\scroll-fade-bottom.svg",
     "$Root\secure-notes\resources\icons\icon-sources.json",
     "$Root\vm_build_secure_notes.sh",
     "$Root\vm_run_secure_notes_sim_visible.sh",
@@ -86,12 +84,6 @@ if ($LASTEXITCODE -ne 0) {
 & scp @scpBase "$Root\secure-notes-core\Cargo.toml" "$remote`:/home/foundation/secure-notes-core/Cargo.toml"
 if ($LASTEXITCODE -ne 0) {
     throw "secure-notes-core Cargo.toml copy failed"
-}
-
-Write-Host "Copying fade assets..."
-& scp @scpBase "$Root\secure-notes\resources\scroll-fade-top.svg" "$Root\secure-notes\resources\scroll-fade-bottom.svg" "$remote`:/home/foundation/secure-notes/resources/"
-if ($LASTEXITCODE -ne 0) {
-    throw "Fade asset copy failed"
 }
 
 Write-Host "Copying KeyOS background and app icon assets..."

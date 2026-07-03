@@ -37,6 +37,29 @@ Do not add a new `@ui/...` import only because the public KeyOS repo has that wi
 - Adjusted local toggle dimensions to match the public `Switch` geometry.
 - Adjusted local ellipsis menu row dimensions toward the public `PopupMenuItem` geometry without importing unverified SDK widgets.
 
+### `codex/ui-foundation-components` SDK-backed UI adapter pass
+
+- Added `docs/KEYOS_DESIGN_SYSTEM_MAP.md` after inspecting the Design System KeyOS Figma file and the installed SDK `@ui` component APIs.
+- Added local SDK snapshot notes under `Codex_Working/sdk_ui_snapshot/` for agent inspection; do not treat that snapshot as production source.
+- Wrapped Secure Notes action buttons with SDK `@ui/button.slint::Button`.
+- Wrapped icon-only controls with SDK `@ui/icon_button.slint::IconButton`.
+- Wrapped single-line inputs with SDK `@ui/input.slint::Input`.
+- Wrapped search with SDK `@ui/search.slint::Search`.
+- Wrapped toggles with SDK `@ui/switch.slint::Switch` while preserving row-level tap behavior for list rows.
+- Replaced the filter sheet's custom picker overlay with SDK `@ui/dropdown.slint::Dropdown` controls.
+- Replaced the ellipsis menu container/rows with SDK `@ui/menu.slint::Menu` and `@ui/menu_item.slint::MenuItem`.
+- Corrected the ellipsis menu structure so `MenuItem` rows are direct children of SDK `Menu`; an extra nested layout causes clipped row text and misplaced trailing icons.
+- Replaced the delete confirmation popup with SDK `@ui/dialog.slint::Dialog`.
+- Removed obsolete hand-drawn filter, lock, document, divider, and star components from the active UI file.
+
+Remaining intentional local wrappers:
+
+- `MultiLineInput`, because the current SDK `TextArea` does not expose the same Done-key dismissal behavior needed for Prime keyboard testing.
+- Neutral Secure Notes list rows, because the product intentionally diverges from Vault's colorful seed-card rows.
+- Import review/result rows, because their fuzzy-match and import-state layout is product-specific, although they now use official switch/icon/button primitives where practical.
+- Scrollable list/detail/form regions currently use plain clipped scroll frames. A partial content-width port of production `KeyOS/ui/ui/widgets/shield.slint` was rejected because Shield is a full shell/backboard treatment, not a generic local fade strip. The rejected asset provenance is recorded in `secure-notes/resources/fader-sources.json`.
+- `FieldEditButton` intentionally renders the designer SVG directly in a fixed image slot instead of using SDK `IconButton`; the current simulator rasterizes that 24px pencil more cleanly without the extra scaling layer.
+
 ## Primary Upstream Sources
 
 | Purpose | Public KeyOS source |
@@ -70,37 +93,12 @@ Stable source links should use:
 
 ## Current Secure Notes UI Inventory
 
-The main UI file is `secure-notes/ui/app.slint`. It currently defines most screen controls locally:
+The main UI file is `secure-notes/ui/app.slint`. It still defines app-specific wrappers locally, but the most common controls are now SDK-backed adapters:
 
-- `GlyphButton`
-- `ActionButton`
-- `FieldEditButton`
-- `PlainLink`
-- `SectionLabel`
-- `PillInput`
-- `MultiLineInput`
-- `SearchInput`
-- `FilterButton`
-- `SelectButton`
-- `LockGlyph`
-- `DocumentGlyph`
-- `ImportHeroIcon`
-- `NoteRow`
-- `ToggleRow`
-- `InlineToggle`
-- `CustomFieldRow`
-- `ImportReviewRow`
-- `ImportResultRow`
-- `MenuItem`
-- `OptionPickerOverlay`
-- `MenuOverlay`
-- `FilterSheetOverlay`
-- `EditFieldOverlay`
-- `NewFolderOverlay`
-- `DeleteOverlay`
-- `AddFieldOverlay`
+- SDK-backed adapters: `GlyphButton`, `ActionButton`, `FieldEditButton`, `PillInput`, `SearchInput`, `FilterButton`, `InlineToggle`, `MenuItem`, `MenuOverlay`, `FilterSheetOverlay`, `DeleteOverlay`.
+- Product-specific local layout: `PlainLink`, `SectionLabel`, `MultiLineInput`, `ImportHeroIcon`, `NoteRow`, `ToggleRow`, `CustomFieldRow`, `DetailTextBox`, `DetailFieldBox`, `ImportReviewRow`, `ImportResultRow`, `EditFieldOverlay`, `NewFolderOverlay`, `AddFieldOverlay`.
 
-This is the root cause of repeated visual drift: the app imports some SDK controls, but important behavior and layout are still implemented by local lookalikes.
+The remaining visual drift risk is no longer basic controls; it is page shell/backboard fidelity, product-specific row/card styling, and keyboard/layout behavior around local multiline fields and modals.
 
 ## Replacement Map
 
@@ -122,7 +120,7 @@ This is the root cause of repeated visual drift: the app imports some SDK contro
 | Note list rows | Custom `NoteRow` | No exact neutral row source found in sampled widgets; Vault uses colorful `LineCard` intentionally diverged from | Keep custom list row, but derive spacing, icon slots, text styles, border, and touch target from KeyOS tokens. Record divergence: Secure Notes intentionally avoids Vault's colorful seed cards and hides secret details on list. |
 | Import review/result rows | Custom rows | Same as note list row plus `Switch` and `Icon` | Keep row structure but replace switches/icons with official components. |
 | Icon rendering | Local `Image` loads from `resources/icons` | `Icon` / `Images.icon(name, size)` | Prefer official icon pipeline if SDK exposes required names. Otherwise keep local designer SVGs with an asset manifest and render near native size inside fixed slots. |
-| Fades for clipped scroll content | Local `TopFade` / `BottomFade` SVG bands | Upstream scroll body state plus KeyOS fade reference | Keep only if tied to actual clipped state. Do not show fade when at bottom/top. |
+| Fades for clipped scroll content | Plain clipped scroll frame, no active fades | `KeyOS/ui/ui/widgets/shield.slint` for future full-shell migration only | Do not use Shield assets as content-width overlays. The production route is to adopt the full Shield/backboard shell. Until then, no fade is better than an incorrect rim/wedge/overlay. |
 
 ## Intentional Divergences
 

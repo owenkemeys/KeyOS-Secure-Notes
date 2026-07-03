@@ -49,5 +49,19 @@ else
   echo "Pre-sim cleanup skipped; preserving current build target for handoff."
 fi
 
+source /etc/profile.d/nix.sh
+cd "$HOME/.foundation/sdk/current"
+exec nix develop --command bash -lc '
+set -euo pipefail
+unset DISPLAY
+SIM_LIBS="$HOME/sim-libs"
+export XDG_RUNTIME_DIR=/run/user/1000
+export WAYLAND_DISPLAY=wayland-1
+export WINIT_UNIX_BACKEND=wayland
+export RUST_BACKTRACE=1
+export XKB_CONFIG_ROOT="$SIM_LIBS/xkeyboard-config/share/X11/xkb"
+export FONTCONFIG_FILE="$SIM_LIBS/fontconfig/etc/fonts/fonts.conf"
+export LD_LIBRARY_PATH="$SIM_LIBS/wayland/lib:$SIM_LIBS/libxkbcommon/lib:$SIM_LIBS/libffi/lib:$SIM_LIBS/fontconfig-lib/lib:${LD_LIBRARY_PATH:-}"
 cd "$HOME/secure-notes"
-exec "$HOME/.foundation/sdk/current/bin/foundation" sim
+exec foundation sim
+'

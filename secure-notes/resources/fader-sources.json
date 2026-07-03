@@ -1,0 +1,46 @@
+{
+  "generated_by": "Codex",
+  "purpose": "Records provenance for KeyOS Shield assets that were evaluated for Secure Notes scroll masking.",
+  "active_component": "none",
+  "source_component_path": "KeyOS/ui/ui/widgets/shield.slint",
+  "source_file": "Design System KeyOS",
+  "source_file_key": "tibcuJ3JvgQQIirfuvsc32",
+  "implementation_note": "A partial content-width Shield port was evaluated and then removed from the active UI because production KeyOS Shield is a whole shell/backboard treatment, not a generic fade strip. The partial port produced visible rims, wedges, and incorrect clipping. Secure Notes currently uses plain clipped scroll frames. A future production-grade fix should migrate the full page shell to the production Shield/backboard model rather than reusing these assets as local overlays.",
+  "assets": [
+    {
+      "role": "light-shield-background",
+      "evaluated_asset_name": "keyos-shield-bg.png",
+      "source_repo_path": "KeyOS/ui/ui/images/shield-bg__64-64-96-64.png",
+      "source_component_path": "KeyOS/ui/ui/widgets/shield.slint",
+      "usage_note": "Retained for provenance only. The rejected partial port used this behind clipped scroll content with Slint nine-slice(64 64 96 64), matching the generated Images.nine-slice mapping in KeyOS."
+    },
+    {
+      "role": "dark-shield-background",
+      "evaluated_asset_name": "keyos-shield-bg-dark.png",
+      "source_repo_path": "KeyOS/ui/ui/images/shield-bg-dark__64-64-96-64.png",
+      "source_component_path": "KeyOS/ui/ui/widgets/shield.slint",
+      "usage_note": "Retained for provenance only. The rejected partial port used this with Slint nine-slice(64 64 96 64), matching the generated Images.nine-slice mapping in KeyOS."
+    },
+    {
+      "role": "top-shield-alpha-mask",
+      "evaluated_asset_name": "keyos-shield-top-alpha-mask.png",
+      "source_repo_path": "KeyOS/ui/ui/images/shield-top-alpha-mask.png",
+      "source_component_path": "KeyOS/ui/ui/widgets/shield.slint",
+      "usage_note": "Retained for provenance only. The production Shield component places this 50px asset over its full shell/backboard Flickable when the viewport is not at the top."
+    },
+    {
+      "role": "bottom-shield-alpha-mask",
+      "evaluated_asset_name": "keyos-shield-bottom-alpha-mask.png",
+      "source_repo_path": "KeyOS/ui/ui/images/shield-bottom-alpha-mask.png",
+      "source_component_path": "KeyOS/ui/ui/widgets/shield.slint",
+      "usage_note": "Retained for provenance only. The production Shield component places this 100px asset over its full shell/backboard Flickable when the viewport is not at the bottom."
+    }
+  ],
+  "removed_workaround": {
+    "local_assets": [
+      "keyos-background-fade-top-light.png",
+      "keyos-background-fade-bottom-light.png"
+    ],
+    "reason": "Those assets baked the current page background into fade covers. Production KeyOS uses Shield background plus alpha-mask overlays instead, so the generated background-cover workaround is no longer active."
+  }
+}

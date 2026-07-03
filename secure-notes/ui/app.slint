@@ -1,7 +1,14 @@
 import { Theme, ButtonStyleProps, ButtonSizeProps, ButtonVariant, ButtonState, ButtonSize } from "@ui/theme.slint";
 import { UISize } from "@ui/theme.slint";
 import { Button } from "@ui/button.slint";
+import { IconButton, IconButtonVariant } from "@ui/icon_button.slint";
+import { Input, InputVariant } from "@ui/input.slint";
+import { Search } from "@ui/search.slint";
+import { Switch } from "@ui/switch.slint";
 import { Dropdown } from "@ui/dropdown.slint";
+import { Menu } from "@ui/menu.slint";
+import { MenuItem as UiMenuItem } from "@ui/menu_item.slint";
+import { Dialog, DialogVariant } from "@ui/dialog.slint";
 
 export { Theme, ButtonStyleProps, ButtonSizeProps, ButtonVariant, ButtonState, ButtonSize }
 
@@ -35,13 +42,12 @@ export struct ImportResultListItem {
 
 component GlyphButton inherits Rectangle {
     in property <string> glyph;
-    in property <brush> glyph-color: Theme.palette-foreground;
+    in property <color> glyph-color: Theme.palette-foreground;
     callback clicked();
 
     width: 52px;
     height: 52px;
-    border-radius: 26px;
-    background: root.glyph == "" ? transparent : (touch.pressed ? Theme.palette-secondary : transparent);
+    background: transparent;
 
     if root.glyph != "x" && root.glyph != "back" && root.glyph != "down" && root.glyph != "ellipsis": Text {
         width: 100%;
@@ -55,47 +61,55 @@ component GlyphButton inherits Rectangle {
         vertical-alignment: center;
     }
 
-    if root.glyph == "x": Image {
-        x: (parent.width - self.width) / 2;
-        y: (parent.height - self.height) / 2;
-        width: 24px;
-        height: 24px;
-        source: @image-url("../resources/icons/clear-x.svg");
-        colorize: root.glyph-color;
-        image-fit: contain;
+    if root.glyph == "x": IconButton {
+        width: 100%;
+        height: 100%;
+        icon: @image-url("../resources/icons/clear-x.svg");
+        icon-color: root.glyph-color;
+        variant: IconButtonVariant.ghost;
+        control-size: 52px;
+        icon-size: 24px;
+        touch-expansion: 0px;
+        clicked => { root.clicked(); }
     }
 
-    if root.glyph == "back": Image {
-        x: (parent.width - self.width) / 2;
-        y: (parent.height - self.height) / 2;
-        width: 24px;
-        height: 24px;
-        source: @image-url("../resources/icons/back.svg");
-        colorize: root.glyph-color;
-        image-fit: contain;
+    if root.glyph == "back": IconButton {
+        width: 100%;
+        height: 100%;
+        icon: @image-url("../resources/icons/back.svg");
+        icon-color: root.glyph-color;
+        variant: IconButtonVariant.ghost;
+        control-size: 52px;
+        icon-size: 24px;
+        touch-expansion: 0px;
+        clicked => { root.clicked(); }
     }
 
-    if root.glyph == "down": Image {
-        x: (parent.width - self.width) / 2;
-        y: (parent.height - self.height) / 2;
-        width: 24px;
-        height: 24px;
-        source: @image-url("../resources/icons/chevron-down.svg");
-        colorize: root.glyph-color;
-        image-fit: contain;
+    if root.glyph == "down": IconButton {
+        width: 100%;
+        height: 100%;
+        icon: @image-url("../resources/icons/chevron-down.svg");
+        icon-color: root.glyph-color;
+        variant: IconButtonVariant.ghost;
+        control-size: 52px;
+        icon-size: 24px;
+        touch-expansion: 0px;
+        clicked => { root.clicked(); }
     }
 
-    if root.glyph == "ellipsis": Image {
-        x: (parent.width - self.width) / 2;
-        y: (parent.height - self.height) / 2;
-        width: 24px;
-        height: 24px;
-        source: @image-url("../resources/icons/ellipsis.svg");
-        colorize: root.glyph-color;
-        image-fit: contain;
+    if root.glyph == "ellipsis": IconButton {
+        width: 100%;
+        height: 100%;
+        icon: @image-url("../resources/icons/ellipsis.svg");
+        icon-color: root.glyph-color;
+        variant: IconButtonVariant.ghost;
+        control-size: 52px;
+        icon-size: 24px;
+        touch-expansion: 0px;
+        clicked => { root.clicked(); }
     }
 
-    touch := TouchArea {
+    if root.glyph == "": TouchArea {
         width: parent.width;
         height: parent.height;
         clicked => {
@@ -106,30 +120,25 @@ component GlyphButton inherits Rectangle {
 
 component ActionButton inherits Rectangle {
     in property <string> text;
-    in property <brush> fill: Theme.palette-primary;
-    in property <brush> foreground: white;
+    in property <color> fill: Theme.palette-primary;
+    in property <color> foreground: white;
     callback clicked();
 
     height: 60px;
-    border-radius: 24px;
-    background: touch.pressed ? root.fill.darker(12%) : root.fill;
-    border-width: 1px;
-    border-color: root.fill.darker(12%);
-    clip: true;
+    background: transparent;
 
-    Text {
+    Button {
         width: 100%;
         height: 100%;
         text: root.text;
-        color: root.foreground;
-        font-family: "Montserrat";
+        background: root.fill;
+        foreground: root.foreground;
+        border-color: root.fill.darker(12%);
+        border-width: 1px;
+        border-radius: 24px;
         font-size: 24px;
         font-weight: 700;
-        horizontal-alignment: center;
-        vertical-alignment: center;
-    }
-
-    touch := TouchArea {
+        touch-expansion: 0px;
         clicked => {
             root.clicked();
         }
@@ -141,8 +150,7 @@ component FieldEditButton inherits Rectangle {
 
     width: 40px;
     height: 40px;
-    border-radius: 16px;
-    background: touch.pressed ? Theme.palette-secondary.darker(8%) : transparent;
+    background: transparent;
 
     Image {
         x: (parent.width - self.width) / 2;
@@ -150,11 +158,13 @@ component FieldEditButton inherits Rectangle {
         width: 24px;
         height: 24px;
         source: @image-url("../resources/icons/edit-pencil.svg");
-        image-fit: contain;
         colorize: Theme.palette-primary;
+        image-fit: contain;
     }
 
-    touch := TouchArea {
+    TouchArea {
+        width: 100%;
+        height: 100%;
         clicked => {
             root.clicked();
         }
@@ -251,60 +261,51 @@ component PillInput inherits Rectangle {
     in property <string> placeholder;
     in property <bool> password: false;
     in property <string> error: "";
-    out property <bool> has-focus: input.has-focus;
+    out property <bool> has-focus: field.has-focus;
     callback edited(string);
     callback accepted();
     callback focus-changed(bool);
-    forward-focus: input;
+    forward-focus: field;
 
     height: 56px;
-    border-radius: 24px;
-    background: Theme.palette-secondary;
-    border-width: input.has-focus || root.error != "" ? 2px : 0px;
-    border-color: root.error != "" ? #d68b6e : Theme.palette-primary;
-    clip: true;
+    background: transparent;
 
-    if root.text == "": Text {
-        x: 16px;
-        y: 0px;
-        width: parent.width - 32px;
-        height: parent.height;
-        text: root.placeholder;
-        color: root.error != "" ? #d68b6e : Theme.palette-muted;
-        font-family: "Montserrat";
-        font-size: 20px;
-        font-weight: 500;
-        horizontal-alignment: left;
-        vertical-alignment: center;
-    }
-
-    input := TextInput {
-        x: 16px;
-        y: 13px;
-        width: parent.width - 32px;
-        height: 30px;
-        text <=> root.text;
-        color: root.error != "" ? #d68b6e : Theme.palette-foreground;
-        font-family: "Montserrat";
-        font-size: 20px;
-        font-weight: 500;
+    field := Input {
+        width: 100%;
+        height: 100%;
+        value <=> root.text;
+        placeholder: root.placeholder;
+        variant: InputVariant.filled;
         input-type: root.password ? InputType.password : InputType.text;
-        single-line: true;
-        vertical-alignment: center;
-        text-cursor-width: 2px;
-        selection-background-color: Theme.palette-primary.with-alpha(0.28);
-        selection-foreground-color: Theme.palette-foreground;
-        edited => {
-            root.edited(self.text);
+        background: Theme.palette-secondary;
+        foreground: root.error != "" ? #d68b6e : Theme.palette-foreground;
+        placeholder-color: root.error != "" ? #d68b6e : Theme.palette-muted;
+        border-color: root.error != "" ? #d68b6e : transparent;
+        border-color-focus: root.error != "" ? #d68b6e : Theme.palette-primary;
+        border-width: root.has-focus || root.error != "" ? 2px : 0px;
+        field-height: 56px;
+        border-radius: 24px;
+        padding-horizontal: 16px;
+        font-size: 20px;
+        font-family: "Montserrat";
+        changed(text) => {
+            root.edited(text);
         }
-        accepted => {
+        submitted(text) => {
             root.accepted();
-            self.clear-focus();
+            focus-reset.focus();
+        }
+        focused => {
+            root.focus-changed(true);
+        }
+        blurred => {
+            root.focus-changed(false);
         }
     }
 
-    changed has-focus => {
-        root.focus-changed(root.has-focus);
+    focus-reset := FocusScope {
+        width: 0px;
+        height: 0px;
     }
 }
 
@@ -382,116 +383,39 @@ component SearchInput inherits Rectangle {
     in-out property <string> text;
     callback edited(string);
     callback cleared();
-    forward-focus: input;
+    forward-focus: field;
 
     height: 56px;
-    border-radius: 24px;
-    background: Theme.palette-secondary;
-    border-width: input.has-focus ? 2px : 0px;
-    border-color: Theme.palette-primary;
-    clip: true;
-
-    Image {
-        x: 20px;
-        y: (parent.height - self.height) / 2;
-        width: 24px;
-        height: 24px;
-        source: @image-url("../resources/icons/search.svg");
-        colorize: Theme.palette-muted;
-        image-fit: contain;
-    }
-
-    if root.text == "": Text {
-        x: 56px;
-        width: parent.width - 78px;
-        height: parent.height;
-        text: "Search...";
-        color: Theme.palette-muted;
-        font-family: "Montserrat";
-        font-size: 20px;
-        font-weight: 500;
-        vertical-alignment: center;
-    }
-
-    input := TextInput {
-        x: 56px;
-        y: 14px;
-        width: parent.width - (root.text == "" ? 78px : 112px);
-        height: 28px;
-        text <=> root.text;
-        color: Theme.palette-foreground;
-        font-family: "Montserrat";
-        font-size: 20px;
-        font-weight: 500;
-        single-line: true;
-        vertical-alignment: center;
-        text-cursor-width: 2px;
-        selection-background-color: Theme.palette-primary.with-alpha(0.28);
-        selection-foreground-color: Theme.palette-foreground;
-        edited => {
-            root.edited(self.text);
-        }
-        accepted => {
-            self.clear-focus();
-        }
-    }
-
-    if root.text != "": GlyphButton {
-        x: parent.width - self.width - 2px;
-        y: 2px;
-        width: 52px;
-        height: 52px;
-        glyph: "x";
-        glyph-color: Theme.palette-muted;
-        clicked => {
-            root.text = "";
-            root.edited("");
-            root.cleared();
-        }
-    }
-}
-
-component FilterGlyph inherits Rectangle {
-    in property <brush> icon-color: Theme.palette-foreground;
-
-    width: 26px;
-    height: 26px;
     background: transparent;
 
-    Rectangle {
-        x: 2px;
-        y: 6px;
-        width: 22px;
-        height: 2px;
-        border-radius: 1px;
-        background: root.icon-color;
+    field := Search {
+        width: 100%;
+        height: 100%;
+        value <=> root.text;
+        placeholder: "Search...";
+        variant: InputVariant.filled;
+        background: Theme.palette-secondary;
+        border-width: self.has-focus ? 2px : 0px;
+        border-radius: 24px;
+        field-height: 56px;
+        padding-horizontal: 20px;
+        font-size: 20px;
+        font-family: "Montserrat";
+        clearable: true;
+        changed(text) => {
+            root.edited(text);
+            if (text == "") {
+                root.cleared();
+            }
+        }
+        submitted(text) => {
+            focus-reset.focus();
+        }
     }
 
-    Rectangle {
-        x: 2px;
-        y: 18px;
-        width: 22px;
-        height: 2px;
-        border-radius: 1px;
-        background: root.icon-color;
-    }
-
-    Rectangle {
-        x: 8px;
-        y: 2px;
-        width: 5px;
-        height: 10px;
-        border-radius: 2px;
-        background: root.icon-color;
-    }
-
-    Rectangle {
-        x: 15px;
-        y: 14px;
-        width: 5px;
-        height: 10px;
-        border-radius: 2px;
-        background: root.icon-color;
+    focus-reset := FocusScope {
+        width: 0px;
+        height: 0px;
     }
 }
 
@@ -502,155 +426,22 @@ component FilterButton inherits Rectangle {
 
     width: 56px;
     height: 56px;
-    border-radius: 24px;
-    background: root.active ? (touch.pressed ? Theme.palette-primary.darker(8%) : Theme.palette-primary) : (touch.pressed || root.open ? Theme.palette-secondary : transparent);
+    background: transparent;
 
-    Image {
-        x: (parent.width - self.width) / 2;
-        y: (parent.height - self.height) / 2;
-        width: 24px;
-        height: 24px;
-        source: @image-url("../resources/icons/filter-sliders.svg");
-        colorize: root.active ? white : (root.open ? Theme.palette-primary : Theme.palette-foreground);
-        image-fit: contain;
-    }
-
-    touch := TouchArea {
+    IconButton {
+        width: 100%;
+        height: 100%;
+        icon: @image-url("../resources/icons/filter-sliders.svg");
+        icon-color: root.active ? white : (root.open ? Theme.palette-primary : Theme.palette-foreground);
+        background: root.active ? Theme.palette-primary : (root.open ? Theme.palette-secondary : transparent);
+        variant: IconButtonVariant.ghost;
+        control-size: 56px;
+        icon-size: 24px;
+        border-radius: 24px;
+        touch-expansion: 0px;
         clicked => {
             root.clicked();
         }
-    }
-}
-
-component SelectButton inherits Rectangle {
-    in property <string> label;
-    in property <string> value;
-    callback clicked();
-
-    height: 56px;
-    border-radius: 0px;
-    background: touch.pressed ? Theme.palette-surface : Theme.palette-background;
-    border-width: 0px;
-    clip: true;
-
-    Text {
-        x: 16px;
-        y: 0px;
-        width: parent.width - 214px;
-        height: parent.height;
-        text: root.label;
-        color: Theme.palette-foreground;
-        font-family: "Montserrat";
-        font-size: 22px;
-        font-weight: 500;
-        vertical-alignment: center;
-        overflow: elide;
-    }
-
-    Text {
-        x: parent.width - 198px;
-        y: 0px;
-        width: 150px;
-        height: parent.height;
-        text: root.value;
-        color: Theme.palette-muted;
-        font-family: "Montserrat";
-        font-size: 20px;
-        font-weight: 500;
-        horizontal-alignment: right;
-        vertical-alignment: center;
-        overflow: elide;
-    }
-
-    Image {
-        x: parent.width - self.width - 16px;
-        y: (parent.height - self.height) / 2;
-        width: 24px;
-        height: 24px;
-        source: @image-url("../resources/icons/chevron-down.svg");
-        colorize: Theme.palette-foreground;
-        image-fit: contain;
-    }
-
-    touch := TouchArea {
-        clicked => {
-            root.clicked();
-        }
-    }
-}
-
-component LockGlyph inherits Rectangle {
-    in property <brush> icon-color: Theme.palette-muted;
-
-    width: 22px;
-    height: 22px;
-    background: transparent;
-
-    Rectangle {
-        x: 5px;
-        y: 9px;
-        width: 12px;
-        height: 10px;
-        border-radius: 2px;
-        border-width: 2px;
-        border-color: root.icon-color;
-        background: transparent;
-    }
-
-    Rectangle {
-        x: 7px;
-        y: 4px;
-        width: 8px;
-        height: 9px;
-        border-radius: 4px;
-        border-width: 2px;
-        border-color: root.icon-color;
-        background: transparent;
-    }
-
-    Rectangle {
-        x: 5px;
-        y: 11px;
-        width: 12px;
-        height: 3px;
-        background: Theme.palette-surface;
-    }
-}
-
-component DocumentGlyph inherits Rectangle {
-    in property <brush> icon-color: white;
-
-    width: 26px;
-    height: 26px;
-    background: transparent;
-
-    Rectangle {
-        x: 5px;
-        y: 3px;
-        width: 16px;
-        height: 20px;
-        border-radius: 3px;
-        border-width: 2px;
-        border-color: root.icon-color;
-        background: transparent;
-    }
-
-    Rectangle {
-        x: 9px;
-        y: 9px;
-        width: 8px;
-        height: 2px;
-        border-radius: 1px;
-        background: root.icon-color;
-    }
-
-    Rectangle {
-        x: 9px;
-        y: 15px;
-        width: 8px;
-        height: 2px;
-        border-radius: 1px;
-        background: root.icon-color;
     }
 }
 
@@ -689,7 +480,7 @@ component NoteRow inherits Rectangle {
 
     height: 78px;
     border-radius: 14px;
-    background: touch.pressed ? Theme.palette-secondary : Theme.palette-surface;
+    background: touch.pressed ? Theme.palette-secondary.with-alpha(0.96) : Theme.palette-surface.with-alpha(0.92);
     border-width: 1px;
     border-color: Theme.palette-border;
     clip: true;
@@ -782,24 +573,19 @@ component InlineToggle inherits Rectangle {
 
     width: 56px;
     height: 28px;
-    border-radius: 14px;
-    background: root.checked ? Theme.palette-primary : Theme.palette-secondary;
-    border-width: 1px;
-    border-color: Theme.palette-border;
+    background: transparent;
 
-    Rectangle {
-        x: root.checked ? parent.width - self.width - 2px : 2px;
-        y: 2px;
-        width: 24px;
-        height: 24px;
-        border-radius: 12px;
-        background: white;
-    }
-
-    if root.interactive: TouchArea {
-        clicked => {
-            root.checked = !root.checked;
-            root.toggled(root.checked);
+    Switch {
+        width: 56px;
+        height: 28px;
+        checked <=> root.checked;
+        disabled: false;
+        track-width: 56px;
+        track-height: 28px;
+        knob-size: 24px;
+        row-height: 28px;
+        changed(checked) => {
+            root.toggled(checked);
         }
     }
 }
@@ -855,47 +641,6 @@ component ErrorText inherits Text {
     wrap: word-wrap;
 }
 
-component OldStarButton inherits Rectangle {
-    in-out property <bool> active;
-
-    width: 52px;
-    height: 52px;
-    border-radius: 26px;
-    background: transparent;
-
-    Text {
-        width: 100%;
-        height: 100%;
-        text: root.active ? "★" : "☆";
-        color: root.active ? Theme.palette-primary : Theme.palette-foreground;
-        font-family: "Montserrat";
-        font-size: 34px;
-        font-weight: 700;
-        horizontal-alignment: center;
-        vertical-alignment: center;
-    }
-
-}
-
-component StarButton inherits Rectangle {
-    in-out property <bool> active;
-
-    width: 52px;
-    height: 52px;
-    border-radius: 26px;
-    background: transparent;
-
-    Image {
-        x: (parent.width - self.width) / 2;
-        y: (parent.height - self.height) / 2;
-        width: 22px;
-        height: 22px;
-        source: root.active ? @image-url("../resources/icons/favorite-star-filled.svg") : @image-url("../resources/icons/favorite-star-outline.svg");
-        colorize: root.active ? Theme.palette-primary : Theme.palette-foreground;
-        image-fit: contain;
-    }
-}
-
 component CustomFieldRow inherits Rectangle {
     in property <int> field-index;
     in property <string> label;
@@ -917,7 +662,7 @@ component CustomFieldRow inherits Rectangle {
             horizontal-stretch: 1;
             height: 68px;
             border-radius: 14px;
-            background: Theme.palette-surface;
+            background: Theme.palette-surface.with-alpha(0.92);
             border-width: 1px;
             border-color: Theme.palette-border;
 
@@ -973,7 +718,7 @@ component CustomFieldRow inherits Rectangle {
                 horizontal-stretch: 1;
                 height: 112px;
                 border-radius: 14px;
-                background: Theme.palette-surface;
+                background: Theme.palette-surface.with-alpha(0.92);
                 border-width: 1px;
                 border-color: Theme.palette-border;
 
@@ -1253,166 +998,23 @@ component ImportResultRow inherits Rectangle {
     }
 }
 
-component BottomFade inherits Rectangle {
+// Plain scroll frame. A partial port of KeyOS Shield was tried here, but the
+// production Shield is a whole shell/backboard treatment, not a content-width
+// fade strip. Keep active scroll clipping simple until the full shell can move
+// to the production component model.
+component SecureShield inherits Rectangle {
+    in property <bool> mask: true;
+    in-out property <length> viewport-y: 0px;
+
     background: transparent;
-    height: 64px;
+    clip: true;
 
-    Image {
-        width: 100%;
-        height: 100%;
-        source: @image-url("../resources/scroll-fade-bottom.svg");
-        image-fit: fill;
-    }
-}
-
-component TopFade inherits Rectangle {
-    background: transparent;
-    height: 58px;
-
-    Image {
-        width: 100%;
-        height: 100%;
-        source: @image-url("../resources/scroll-fade-top.svg");
-        image-fit: fill;
-    }
-}
-
-component MenuItem inherits Rectangle {
-    in property <string> label;
-    in property <string> icon;
-    callback clicked();
-
-    height: 64px;
-    background: touch.pressed ? Theme.palette-surface : Theme.palette-background;
-
-    Text {
-        x: 32px;
-        y: 0px;
-        width: parent.width - 96px;
-        height: parent.height;
-        text: root.label;
-        color: Theme.palette-foreground;
-        font-family: "Montserrat";
-        font-size: 22px;
-        font-weight: 500;
-        vertical-alignment: center;
-        overflow: elide;
-    }
-
-    Image {
-        x: parent.width - self.width - 32px;
-        y: (parent.height - self.height) / 2;
-        width: 24px;
-        height: 24px;
-        source: root.icon == "plus" ? @image-url("../resources/icons/plus.svg") : (root.icon == "import" ? @image-url("../resources/icons/import.svg") : @image-url("../resources/icons/archive-box.svg"));
-        image-fit: contain;
-    }
-
-    touch := TouchArea {
+    flickable := Flickable {
         width: parent.width;
         height: parent.height;
-        clicked => {
-            root.clicked();
-        }
-    }
-}
-
-component Divider inherits Rectangle {
-    height: 1px;
-    background: Theme.palette-border;
-}
-
-component OptionPickerOverlay inherits Rectangle {
-    in property <string> title;
-    in property <[string]> options;
-    in property <int> selected-index;
-    callback selected(int, string);
-    callback close();
-
-    background: #00000055;
-
-    TouchArea {
-        clicked => {
-            root.close();
-        }
-    }
-
-    Rectangle {
-        width: parent.width - 42px;
-        height: 520px;
-        x: 21px;
-        y: (parent.height - self.height) / 2;
-        border-radius: 24px;
-        background: Theme.palette-background;
-        border-width: 1px;
-        border-color: Theme.palette-border;
-        clip: true;
-
-        VerticalLayout {
-            padding-left: 18px;
-            padding-right: 18px;
-            padding-top: 18px;
-            padding-bottom: 18px;
-            spacing: 10px;
-
-            HorizontalLayout {
-                height: 48px;
-
-                Text {
-                    text: root.title;
-                    color: Theme.palette-foreground;
-                    font-family: "Montserrat";
-                    font-size: 28px;
-                    font-weight: 700;
-                    vertical-alignment: center;
-                    horizontal-stretch: 1;
-                    overflow: elide;
-                }
-
-                GlyphButton {
-                    glyph: "x";
-                    clicked => { root.close(); }
-                }
-            }
-
-            Flickable {
-                width: 100%;
-                vertical-stretch: 1;
-
-                VerticalLayout {
-                    width: parent.width;
-                    spacing: 8px;
-
-                    for option[index] in root.options: Rectangle {
-                        height: 54px;
-                        border-radius: 16px;
-                        background: index == root.selected-index ? Theme.palette-primary : Theme.palette-secondary;
-                        border-width: 1px;
-                        border-color: Theme.palette-border;
-                        clip: true;
-
-                        Text {
-                            x: 16px;
-                            width: parent.width - 32px;
-                            height: parent.height;
-                            text: option;
-                            color: index == root.selected-index ? white : Theme.palette-foreground;
-                            font-family: "Montserrat";
-                            font-size: 20px;
-                            font-weight: 600;
-                            vertical-alignment: center;
-                            overflow: elide;
-                        }
-
-                        TouchArea {
-                            clicked => {
-                                root.selected(index, option);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        viewport-width: self.width;
+        viewport-y <=> root.viewport-y;
+        @children
     }
 }
 
@@ -1430,58 +1032,60 @@ component MenuOverlay inherits Rectangle {
         }
     }
 
-    Rectangle {
+    Menu {
         x: 30px;
         y: 74px + UISize.control-center-status-bar-height;
         width: parent.width - 60px;
-        height: 194px;
-        border-radius: 22px;
-        background: Theme.palette-background;
-        border-width: 1px;
-        border-color: Theme.palette-border;
-        clip: true;
+        menu-border-radius: 22px;
+        menu-background: Theme.palette-background;
+        menu-border-color: Theme.palette-border;
 
-        Rectangle {
+        UiMenuItem {
             width: 100%;
-            height: 100%;
-            background: transparent;
-
-            MenuItem {
-                y: 0px;
-                width: 100%;
-                label: "New Item";
-                icon: "plus";
-                clicked => { root.new-item(); }
-            }
-            Divider { y: 64px; width: 100%; }
-            MenuItem {
-                y: 65px;
-                width: 100%;
-                label: "Import";
-                icon: "import";
-                clicked => { root.import-file(); }
-            }
-            Divider { y: 129px; width: 100%; }
-            MenuItem {
-                y: 130px;
-                width: 100%;
-                label: "View Archive";
-                icon: "archive";
-                clicked => { root.view-archive(); }
-            }
+            label: "New Item";
+            end-icon: @image-url("../resources/icons/plus.svg");
+            item-height: 64px;
+            padding-horizontal: 32px;
+            icon-size: 24px;
+            font-size: 22px;
+            clicked => { root.new-item(); }
+        }
+        UiMenuItem {
+            width: 100%;
+            label: "Import";
+            end-icon: @image-url("../resources/icons/import.svg");
+            item-height: 64px;
+            padding-horizontal: 32px;
+            icon-size: 24px;
+            font-size: 22px;
+            clicked => { root.import-file(); }
+        }
+        UiMenuItem {
+            width: 100%;
+            label: "View Archive";
+            end-icon: @image-url("../resources/icons/archive-box.svg");
+            item-height: 64px;
+            padding-horizontal: 32px;
+            icon-size: 24px;
+            font-size: 22px;
+            clicked => { root.view-archive(); }
         }
     }
 }
 
 component FilterSheetOverlay inherits Rectangle {
-    in property <string> folder;
-    in property <string> type-filter;
-    in property <string> tag;
-    in property <string> sort-order;
-    callback choose-folder();
-    callback choose-type();
-    callback choose-tag();
-    callback choose-sort();
+    in property <[string]> folder-options;
+    in property <[string]> type-options;
+    in property <[string]> tag-options;
+    in property <[string]> sort-options;
+    in-out property <int> folder-index;
+    in-out property <int> type-index;
+    in-out property <int> tag-index;
+    in-out property <int> sort-index;
+    callback folder-changed(int, string);
+    callback type-changed(int, string);
+    callback tag-changed(int, string);
+    callback sort-changed(int, string);
     callback reset();
     callback apply();
     callback close();
@@ -1496,7 +1100,7 @@ component FilterSheetOverlay inherits Rectangle {
         x: 0px;
         y: parent.height - self.height;
         width: parent.width;
-        height: 442px;
+        height: 590px;
         border-radius: 24px;
         background: Theme.palette-background;
         border-width: 1px;
@@ -1546,45 +1150,68 @@ component FilterSheetOverlay inherits Rectangle {
                 }
             }
 
-            Rectangle {
+            VerticalLayout {
                 width: 100%;
-                height: 225px;
-                border-radius: 24px;
-                background: Theme.palette-background;
-                border-width: 1px;
-                border-color: Theme.palette-border;
-                clip: true;
+                height: 348px;
+                spacing: 8px;
 
-                VerticalLayout {
+                Dropdown {
                     width: 100%;
-                    height: 100%;
+                    height: 81px;
+                    label: "Folder";
+                    options: root.folder-options;
+                    selected-index <=> root.folder-index;
+                    placeholder: "All folders";
+                    control-height: 56px;
+                    border-radius: 24px;
+                    max-visible-items: 4;
+                    changed(index, text) => {
+                        root.folder-changed(index, text);
+                    }
+                }
 
-                    SelectButton {
-                        width: 100%;
-                        label: "Folder";
-                        value: root.folder;
-                        clicked => { root.choose-folder(); }
+                Dropdown {
+                    width: 100%;
+                    height: 81px;
+                    label: "Type";
+                    options: root.type-options;
+                    selected-index <=> root.type-index;
+                    placeholder: "All types";
+                    control-height: 56px;
+                    border-radius: 24px;
+                    max-visible-items: 4;
+                    changed(index, text) => {
+                        root.type-changed(index, text);
                     }
-                    Divider {}
-                    SelectButton {
-                        width: 100%;
-                        label: "Type";
-                        value: root.type-filter;
-                        clicked => { root.choose-type(); }
+                }
+
+                Dropdown {
+                    width: 100%;
+                    height: 81px;
+                    label: "Tag";
+                    options: root.tag-options;
+                    selected-index <=> root.tag-index;
+                    placeholder: "All tags";
+                    control-height: 56px;
+                    border-radius: 24px;
+                    max-visible-items: 4;
+                    changed(index, text) => {
+                        root.tag-changed(index, text);
                     }
-                    Divider {}
-                    SelectButton {
-                        width: 100%;
-                        label: "Tag";
-                        value: root.tag;
-                        clicked => { root.choose-tag(); }
-                    }
-                    Divider {}
-                    SelectButton {
-                        width: 100%;
-                        label: "Sort by";
-                        value: root.sort-order;
-                        clicked => { root.choose-sort(); }
+                }
+
+                Dropdown {
+                    width: 100%;
+                    height: 81px;
+                    label: "Sort by";
+                    options: root.sort-options;
+                    selected-index <=> root.sort-index;
+                    placeholder: "A-Z";
+                    control-height: 56px;
+                    border-radius: 24px;
+                    max-visible-items: 4;
+                    changed(index, text) => {
+                        root.sort-changed(index, text);
                     }
                 }
             }
@@ -1851,73 +1478,20 @@ component DeleteOverlay inherits Rectangle {
     callback cancel();
     callback confirm();
 
-    background: #00000055;
-
-    TouchArea {}
-
-    Rectangle {
-        width: parent.width - 48px;
-        height: 496px;
-        x: 24px;
-        y: (parent.height - self.height) / 2;
-        border-radius: 24px;
-        background: Theme.palette-background;
-        border-width: 1px;
-        border-color: Theme.palette-border;
-
-        VerticalLayout {
-            padding-left: 24px;
-            padding-right: 24px;
-            padding-top: 26px;
-            padding-bottom: 28px;
-            spacing: 18px;
-
-            Text {
-                text: "!";
-                color: Theme.palette-danger;
-                font-family: "Montserrat";
-                font-size: 52px;
-                font-weight: 700;
-                horizontal-alignment: center;
-            }
-
-            Text {
-                text: root.title;
-                color: Theme.palette-foreground;
-                font-family: "Montserrat";
-                font-size: 36px;
-                font-weight: 700;
-                horizontal-alignment: center;
-                wrap: word-wrap;
-            }
-
-            Text {
-                text: root.body;
-                color: Theme.palette-muted;
-                font-family: "Montserrat";
-                font-size: 23px;
-                font-weight: 500;
-                horizontal-alignment: center;
-                wrap: word-wrap;
-                vertical-stretch: 1;
-            }
-
-            ActionButton {
-                width: 100%;
-                text: "Cancel";
-                fill: Theme.palette-secondary;
-                foreground: Theme.palette-foreground;
-                clicked => { root.cancel(); }
-            }
-
-            ActionButton {
-                width: 100%;
-                text: "Delete";
-                fill: Theme.palette-danger;
-                foreground: white;
-                clicked => { root.confirm(); }
-            }
-        }
+    Dialog {
+        width: parent.width;
+        height: parent.height;
+        open: true;
+        title: root.title;
+        message: root.body;
+        variant: DialogVariant.danger;
+        primary-action: "Delete";
+        secondary-action: "Cancel";
+        panel-width: parent.width - 48px;
+        font-size: 22px;
+        dismissed => { root.cancel(); }
+        secondary-clicked => { root.cancel(); }
+        primary-clicked => { root.confirm(); }
     }
 }
 
@@ -2087,18 +1661,14 @@ export component AppWindow inherits Window {
     in-out property <[string]> filter-tag-options: ["All tags"];
     in-out property <[string]> sort-order-options: ["A-Z", "Z-A", "Last Updated", "Recently Added", "Oldest Added", "Type", "Folder", "Favorites First"];
     in-out property <[string]> edit-folder-options: ["New Folder...", "None"];
-    in-out property <[string]> picker-options: [];
     in-out property <string> filter-folder: "All folders";
     in-out property <string> filter-type: "All types";
     in-out property <string> filter-tag: "All tags";
     in-out property <string> sort-order: "A-Z";
-    in-out property <string> picker-title: "";
-    in-out property <int> picker-kind: 0;
     in-out property <int> filter-folder-index: 0;
     in-out property <int> filter-type-index: 0;
     in-out property <int> filter-tag-index: 0;
     in-out property <int> sort-order-index: 0;
-    in-out property <int> picker-index: 0;
 
     in-out property <string> detail-title: "";
     in-out property <string> detail-type: "";
@@ -2134,7 +1704,6 @@ export component AppWindow inherits Window {
     in-out property <bool> add-field-open: false;
     in-out property <bool> edit-field-open: false;
     in-out property <bool> new-folder-open: false;
-    in-out property <bool> picker-open: false;
     in-out property <string> add-field-type: "Text";
     in-out property <int> add-field-type-index: 0;
     in-out property <string> add-field-label: "";
@@ -2240,68 +1809,6 @@ export component AppWindow inherits Window {
         }
     }
 
-    function open-picker(kind: int) {
-        root.picker-kind = kind;
-        if (kind == 0) {
-            root.picker-title = "Folder";
-            root.picker-options = root.filter-folder-options;
-            root.picker-index = root.filter-folder-index;
-        } else if (kind == 1) {
-            root.picker-title = "Type";
-            root.picker-options = root.filter-type-options;
-            root.picker-index = root.filter-type-index;
-        } else if (kind == 2) {
-            root.picker-title = "Tags";
-            root.picker-options = root.filter-tag-options;
-            root.picker-index = root.filter-tag-index;
-        } else if (kind == 3) {
-            root.picker-title = "Sort by";
-            root.picker-options = root.sort-order-options;
-            root.picker-index = root.sort-order-index;
-        } else {
-            root.picker-title = "Assign Folder";
-            root.picker-options = root.edit-folder-options;
-            root.picker-index = root.edit-folder-index;
-        }
-        root.picker-open = true;
-    }
-
-    function apply-picker-selection(kind: int, index: int, label: string) {
-        root.picker-open = false;
-        if (kind == 0) {
-            root.filter-folder-index = index;
-            root.filter-folder = label;
-            root.filter-folder-index-changed(index);
-            root.filter-folder-changed(label);
-        } else if (kind == 1) {
-            root.filter-type-index = index;
-            root.filter-type = label;
-            root.filter-type-index-changed(index);
-            root.filter-type-changed(label);
-        } else if (kind == 2) {
-            root.filter-tag-index = index;
-            root.filter-tag = label;
-            root.filter-tag-index-changed(index);
-            root.filter-tag-changed(label);
-        } else if (kind == 3) {
-            root.sort-order-index = index;
-            root.sort-order = label;
-            root.sort-order-index-changed(index);
-            root.sort-order-changed(label);
-        } else {
-            if (label == "New Folder...") {
-                root.edit-folder-index = root.edit-folder-committed-index;
-                root.new-folder-name = "";
-                root.new-folder-error = "";
-                root.new-folder-open = true;
-            } else {
-                root.edit-folder = label == "None" ? "" : label;
-                root.edit-folder-index = index;
-                root.edit-folder-committed-index = index;
-            }
-        }
-    }
-
     title: "Secure Notes";
     preferred-width: 480px;
     preferred-height: 800px;
@@ -2377,28 +1884,12 @@ export component AppWindow inherits Window {
                 overflow: elide;
             }
 
-            Rectangle {
-                width: 52px;
-                height: 52px;
-                border-radius: 26px;
-                background: header-touch.pressed && root.mode == 0 ? Theme.palette-secondary : transparent;
-
-                if root.mode == 0: Image {
-                    x: (parent.width - self.width) / 2;
-                    y: (parent.height - self.height) / 2;
-                    width: 24px;
-                    height: 24px;
-                    source: @image-url("../resources/icons/ellipsis.svg");
-                    colorize: Theme.palette-foreground;
-                    image-fit: contain;
-                }
-
-                header-touch := TouchArea {
-                    clicked => {
-                        if (root.mode == 0) {
-                            root.dismiss-edit-keyboard();
-                            root.menu-open = true;
-                        }
+            GlyphButton {
+                glyph: root.mode == 0 ? "ellipsis" : "";
+                clicked => {
+                    if (root.mode == 0) {
+                        root.dismiss-edit-keyboard();
+                        root.menu-open = true;
                     }
                 }
             }
@@ -2442,62 +1933,43 @@ export component AppWindow inherits Window {
                 overflow: elide;
             }
 
-            Rectangle {
+            SecureShield {
                 width: 100%;
                 vertical-stretch: 1;
-                background: transparent;
-                clip: true;
+                viewport-y <=> root.list-scroll-y;
 
-                list-flick := Flickable {
+                VerticalLayout {
                     width: parent.width;
-                    height: parent.height;
-                    viewport-y <=> root.list-scroll-y;
+                    spacing: 10px;
 
-                    VerticalLayout {
-                        width: parent.width;
-                        spacing: 10px;
-
-                        for item[index] in root.list-items: NoteRow {
-                            width: 100%;
-                            item-id: item.id;
-                            title: item.title;
-                            subtitle: item.subtitle;
-                            pin-required: item.pin-required;
-                            clicked(id) => {
-                                root.row-selected(id);
-                            }
-                        }
-
-                        if root.list-items.length == 0: Text {
-                            height: 116px;
-                            text: "No notes found.";
-                            color: Theme.palette-muted;
-                            font-family: "Montserrat";
-                            font-size: 18px;
-                            font-weight: 600;
-                            horizontal-alignment: center;
-                            vertical-alignment: center;
-                        }
-
-                        PlainLink {
-                            width: 100%;
-                            icon: "plus";
-                            text: "New Item";
-                            clicked => { root.new-note-requested(); }
+                    for item[index] in root.list-items: NoteRow {
+                        width: 100%;
+                        item-id: item.id;
+                        title: item.title;
+                        subtitle: item.subtitle;
+                        pin-required: item.pin-required;
+                        clicked(id) => {
+                            root.row-selected(id);
                         }
                     }
-                }
 
-                TopFade {
-                    width: parent.width;
-                    y: 0px;
-                    visible: list-flick.viewport-y < -1px;
-                }
+                    if root.list-items.length == 0: Text {
+                        height: 116px;
+                        text: "No notes found.";
+                        color: Theme.palette-muted;
+                        font-family: "Montserrat";
+                        font-size: 18px;
+                        font-weight: 600;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
+                    }
 
-                BottomFade {
-                    width: parent.width;
-                    y: parent.height - self.height;
-                    visible: list-flick.viewport-height > list-flick.height && list-flick.viewport-y > list-flick.height - list-flick.viewport-height + 1px;
+                    PlainLink {
+                        width: 100%;
+                        icon: "plus";
+                        text: "New Item";
+                        clicked => { root.new-note-requested(); }
+                    }
                 }
             }
         }
@@ -2550,54 +2022,35 @@ export component AppWindow inherits Window {
                 }
             }
 
-            Rectangle {
+            SecureShield {
                 width: 100%;
                 vertical-stretch: 1;
-                background: transparent;
-                clip: true;
 
-                detail-flick := Flickable {
+                VerticalLayout {
                     width: parent.width;
-                    height: parent.height;
+                    spacing: 10px;
 
-                    VerticalLayout {
-                        width: parent.width;
-                        spacing: 10px;
+                    SectionLabel { label: "Information"; }
 
-                        SectionLabel { label: "Information"; }
-
-                        DetailTextBox {
-                            width: 100%;
-                            min-box-height: 132px;
-                            text: root.detail-body;
-                        }
-
-                        if root.detail-field-items.length > 0: SectionLabel { label: "Custom Fields"; }
-
-                        for field[index] in root.detail-field-items: DetailFieldBox {
-                            width: 100%;
-                            label: field.label;
-                            value: field.value;
-                            kind: field.kind;
-                        }
-
-                        Rectangle {
-                            height: 8px;
-                            background: transparent;
-                        }
+                    DetailTextBox {
+                        width: 100%;
+                        min-box-height: 132px;
+                        text: root.detail-body;
                     }
-                }
 
-                TopFade {
-                    width: parent.width;
-                    y: 0px;
-                    visible: detail-flick.viewport-y < -1px;
-                }
+                    if root.detail-field-items.length > 0: SectionLabel { label: "Custom Fields"; }
 
-                BottomFade {
-                    width: parent.width;
-                    y: parent.height - self.height;
-                    visible: detail-flick.viewport-height > detail-flick.height && detail-flick.viewport-y > detail-flick.height - detail-flick.viewport-height + 1px;
+                    for field[index] in root.detail-field-items: DetailFieldBox {
+                        width: 100%;
+                        label: field.label;
+                        value: field.value;
+                        kind: field.kind;
+                    }
+
+                    Rectangle {
+                        height: 8px;
+                        background: transparent;
+                    }
                 }
             }
 
@@ -2657,18 +2110,12 @@ export component AppWindow inherits Window {
                 horizontal-alignment: center;
             }
 
-            Rectangle {
+            SecureShield {
                 width: 100%;
                 vertical-stretch: 1;
-                background: transparent;
-                clip: true;
+                viewport-y <=> root.edit-scroll-y;
 
-                edit-scroll := Flickable {
-                    width: parent.width;
-                    height: parent.height;
-                    viewport-y <=> root.edit-scroll-y;
-
-                    VerticalLayout {
+                VerticalLayout {
                         width: parent.width;
                         spacing: 16px;
 
@@ -2901,19 +2348,6 @@ export component AppWindow inherits Window {
                         }
                     }
                 }
-
-                TopFade {
-                    width: parent.width;
-                    y: 0px;
-                    visible: edit-scroll.viewport-y < -1px;
-                }
-
-                BottomFade {
-                    width: parent.width;
-                    y: parent.height - self.height;
-                    visible: edit-scroll.viewport-height > edit-scroll.height && edit-scroll.viewport-y > edit-scroll.height - edit-scroll.viewport-height + 1px;
-                }
-            }
 
             HorizontalLayout {
                 width: 100%;
@@ -3178,10 +2612,14 @@ export component AppWindow inherits Window {
     if root.filters-open: FilterSheetOverlay {
         width: parent.width;
         height: parent.height;
-        folder: root.filter-folder;
-        type-filter: root.filter-type;
-        tag: root.filter-tag;
-        sort-order: root.sort-order;
+        folder-options: root.filter-folder-options;
+        type-options: root.filter-type-options;
+        tag-options: root.filter-tag-options;
+        sort-options: root.sort-order-options;
+        folder-index <=> root.filter-folder-index;
+        type-index <=> root.filter-type-index;
+        tag-index <=> root.filter-tag-index;
+        sort-index <=> root.sort-order-index;
         close => {
             root.filters-open = false;
         }
@@ -3206,17 +2644,29 @@ export component AppWindow inherits Window {
             root.filter-tag-changed(root.filter-tag);
             root.sort-order-changed(root.sort-order);
         }
-        choose-folder => {
-            root.open-picker(0);
+        folder-changed(index, label) => {
+            root.filter-folder-index = index;
+            root.filter-folder = label;
+            root.filter-folder-index-changed(index);
+            root.filter-folder-changed(label);
         }
-        choose-type => {
-            root.open-picker(1);
+        type-changed(index, label) => {
+            root.filter-type-index = index;
+            root.filter-type = label;
+            root.filter-type-index-changed(index);
+            root.filter-type-changed(label);
         }
-        choose-tag => {
-            root.open-picker(2);
+        tag-changed(index, label) => {
+            root.filter-tag-index = index;
+            root.filter-tag = label;
+            root.filter-tag-index-changed(index);
+            root.filter-tag-changed(label);
         }
-        choose-sort => {
-            root.open-picker(3);
+        sort-changed(index, label) => {
+            root.sort-order-index = index;
+            root.sort-order = label;
+            root.sort-order-index-changed(index);
+            root.sort-order-changed(label);
         }
     }
 
@@ -3295,17 +2745,4 @@ export component AppWindow inherits Window {
         }
     }
 
-    if root.picker-open: OptionPickerOverlay {
-        width: parent.width;
-        height: parent.height;
-        title: root.picker-title;
-        options: root.picker-options;
-        selected-index: root.picker-index;
-        close => {
-            root.picker-open = false;
-        }
-        selected(index, label) => {
-            root.apply-picker-selection(root.picker-kind, index, label);
-        }
-    }
 }

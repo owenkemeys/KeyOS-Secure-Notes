@@ -15,6 +15,7 @@ sim_screenshots/
 
 # Archived local experiment snapshots
 archive/
+Codex_Working/
 *.tgz
 
 # Python cache from FAT image helper scripts
