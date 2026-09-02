@@ -4,18 +4,18 @@ version = "0.1.0"
 edition = "2021"
 
 [workspace]
+exclude = [".foundation-sdk"]
 
 [dependencies]
-fs = { path = "/home/foundation/.foundation/sdk/current/lib/keyos/api/fs" }
+fs = { path = ".foundation-sdk/current/lib/keyos/api/fs" }
 log = "0.4"
-log-server = { package = "xous-api-log", path = "/home/foundation/.foundation/sdk/current/lib/keyos/xous/api/log" }
+log-server = { package = "xous-api-log", path = ".foundation-sdk/current/lib/keyos/xous/api/log" }
 secure-notes-core = { path = "../secure-notes-core" }
 serde = { version = "1.0", features = ["derive"] }
 simd-adler32 = "=0.3.7"
-server = { path = "/home/foundation/.foundation/sdk/current/lib/keyos/server" }
-slint-keyos-platform = { path = "/home/foundation/.foundation/sdk/current/lib/keyos/slint-keyos-platform/runtime" }
-foundation-themes = { path = "/home/foundation/.foundation/sdk/current/lib/keyos/sdk/crates/foundation-themes" }
+server = { path = ".foundation-sdk/current/lib/keyos/server" }
+slint-keyos-platform = { path = ".foundation-sdk/current/lib/keyos/slint-keyos-platform/runtime" }
+foundation-themes = { path = ".foundation-sdk/current/lib/keyos/sdk/crates/foundation-themes" }
 
 [build-dependencies]
-foundation-themes = { path = "/home/foundation/.foundation/sdk/current/lib/keyos/sdk/crates/foundation-themes" }
-slint-keyos-platform-build = { path = "/home/foundation/.foundation/sdk/current/lib/keyos/slint-keyos-platform/build" }
+slint-keyos-platform-build = { path = ".foundation-sdk/current/lib/keyos/slint-keyos-platform/build" }

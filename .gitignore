@@ -1,6 +1,10 @@
 # Build outputs
 target/
 **/target/
+.foundation-sdk/
+**/.foundation-sdk/
+**/manifest.toml
+**/ui/ui
 
 # Local simulator/build logs
 *.log
