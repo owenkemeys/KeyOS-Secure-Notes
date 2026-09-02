@@ -35,23 +35,36 @@ tools/              Local helper scripts for writing test files into simulator s
 
 ## Build Notes
 
-This prototype was developed from Windows by copying source into an Ubuntu VM with the Foundation SDK installed.
+Install the Foundation SDK using the [official setup guide](https://docs.foundation.xyz/developers/get-started/).
+The app uses SDK 1.0 and resolves its framework dependencies through the ignored,
+app-local `secure-notes/.foundation-sdk/current` mapping. The Foundation CLI
+creates this mapping to the selected SDK when building; no KeyOS worktree,
+matching VM directory, or manual edits to Cargo dependency paths are required.
 
-The app `Cargo.toml` currently uses absolute SDK paths inside the VM:
+From this repository root, enter the SDK development shell:
 
-```toml
-/home/foundation/.foundation/sdk/current
+```bash
+cd secure-notes
+foundation develop
 ```
 
-That is expected for this prototype setup. Developers taking this over should either build in a matching VM path or update the SDK path dependencies for their environment.
+Run the following commands inside that shell:
 
-The latest simulator build completed successfully with:
-
-```text
-foundation build
+```bash
+foundation doctor
+foundation build --release
+foundation pack --release
 ```
 
-Known build warnings are unused Slint components left behind from earlier UI iterations. They are not runtime blockers, but should be cleaned up by maintainers.
+`foundation build` produces a signed device bundle; `foundation pack` creates
+the installable `target/keyos/secure-notes.app` archive. To build and run the
+desktop simulator instead, use `foundation sim` inside the same SDK shell.
+
+Before building, select a signing identity available on your machine in
+`secure-notes/app-config.toml`; manage identities with `foundation cert`.
+The configured `passport-prime-dev` identity is not included in this repository.
+Keep the publisher signing key unchanged when upgrading an existing installation.
+Switching publishers can require uninstalling the app, which removes its AppData.
 
 ## Security And Production Notes
 
