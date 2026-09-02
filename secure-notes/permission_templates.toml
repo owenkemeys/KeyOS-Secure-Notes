@@ -16,7 +16,6 @@
     "GetUsbReadAccess",
     "GetUserReadAccess",
     "Flush",
-    "FlushFs",
     "Remove",
     "Rename",
     "AtomicCopy",
@@ -24,8 +23,6 @@
     "AsyncWrite",
     "AsyncCopyBlock",
     "SubscribeFilesystemEvent",
-    "GetSystemAppDataReadAccess",
-    "GetSystemAppDataWriteAccess",
 ]
 [gui-app]
 "os/fs" = [

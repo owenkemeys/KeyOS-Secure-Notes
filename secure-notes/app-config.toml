@@ -4,10 +4,11 @@ friendly-app-name = "Secure Notes"
 launcher-app-name = "Notes"
 description = "Store and search private notes"
 icon = "resources/icon.svg"
+theme = "theme/theme.json"
 app-id = "0x536563757265204e6f746573204d5650"
 version = "0.1.0"
 min-keyos-version = "1.0.0"
-signing-identity = "Owen Foundation Trial"
+signing-identity = "passport-prime-dev"
 
 [publisher]
 name = "Owen / Foundation trial"

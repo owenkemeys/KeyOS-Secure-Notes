@@ -3,11 +3,11 @@ mod theme;
 use crate::fs_permissions::FileSystemPermissions;
 use secure_notes_core::{
     account_input, fields_as_input, information_body, note_type_input, secret_input, tags_as_input,
-    BitwardenImportReviewItem as CoreImportReviewItem, BitwardenImportPreview, NotesVault,
+    BitwardenImportPreview, BitwardenImportReviewItem as CoreImportReviewItem, NotesVault,
     SecureNote,
 };
 use slint_keyos_platform::{
-    app_ui,
+    app_ui2,
     file_backed::JsonBacked,
     gui_server_api::navigation::{
         filepicker::{
@@ -20,7 +20,7 @@ use slint_keyos_platform::{
 };
 use std::{cell::RefCell, io::Read, rc::Rc};
 
-app_ui!("Secure Notes");
+app_ui2!("Secure Notes");
 
 const DATABASE_FILE: &str = "secure_notes_v1.json";
 
@@ -363,7 +363,15 @@ fn app_main(cx: AppContext, ui: AppWindow) {
         let ui_weak = ui.as_weak();
         let state = state.clone();
         ui.on_save_note_requested(
-            move |title, item_type, account, secret, fields, folder, tags, favorite, pin_required| {
+            move |title,
+                  item_type,
+                  account,
+                  secret,
+                  fields,
+                  folder,
+                  tags,
+                  favorite,
+                  pin_required| {
                 let Some(ui) = ui_weak.upgrade() else {
                     return;
                 };
@@ -423,8 +431,11 @@ fn app_main(cx: AppContext, ui: AppWindow) {
             let Some(ui) = ui_weak.upgrade() else {
                 return;
             };
-            let fields =
-                update_field_value(ui.get_edit_fields().as_str(), index.max(0) as usize, value.as_str());
+            let fields = update_field_value(
+                ui.get_edit_fields().as_str(),
+                index.max(0) as usize,
+                value.as_str(),
+            );
             ui.set_edit_fields(SharedString::from(fields.clone()));
         });
     }
@@ -484,7 +495,9 @@ fn app_main(cx: AppContext, ui: AppWindow) {
             };
             let folder = folder.as_str().trim().to_string();
             if folder.is_empty() {
-                ui.set_new_folder_error(SharedString::from("Missing field, please add a Folder name"));
+                ui.set_new_folder_error(SharedString::from(
+                    "Missing field, please add a Folder name",
+                ));
                 return;
             }
 
@@ -939,8 +952,12 @@ fn render_import_intro(ui: &AppWindow) {
     ui.set_import_stage(0);
     ui.set_import_file_label(SharedString::from(""));
     ui.set_import_summary(SharedString::from(""));
-    ui.set_import_review_items(ModelRc::new(VecModel::from(Vec::<ImportReviewListItem>::new())));
-    ui.set_import_result_items(ModelRc::new(VecModel::from(Vec::<ImportResultListItem>::new())));
+    ui.set_import_review_items(ModelRc::new(VecModel::from(
+        Vec::<ImportReviewListItem>::new(),
+    )));
+    ui.set_import_result_items(ModelRc::new(VecModel::from(
+        Vec::<ImportResultListItem>::new(),
+    )));
     ui.set_import_can_continue(false);
 }
 
@@ -956,7 +973,9 @@ fn render_import_preview(
     ui.set_import_file_label(SharedString::from(path));
     ui.set_import_summary(SharedString::from(import_preview_text(preview)));
     ui.set_import_review_items(import_review_model(review_items));
-    ui.set_import_result_items(ModelRc::new(VecModel::from(Vec::<ImportResultListItem>::new())));
+    ui.set_import_result_items(ModelRc::new(VecModel::from(
+        Vec::<ImportResultListItem>::new(),
+    )));
     ui.set_import_can_continue(review_items.iter().any(|item| item.selected));
 }
 
@@ -969,9 +988,15 @@ fn render_import_error(ui: &AppWindow, path: &str, message: &str) {
     } else {
         path
     }));
-    ui.set_import_summary(SharedString::from(format!("Cannot import this file.\n\n{message}")));
-    ui.set_import_review_items(ModelRc::new(VecModel::from(Vec::<ImportReviewListItem>::new())));
-    ui.set_import_result_items(ModelRc::new(VecModel::from(Vec::<ImportResultListItem>::new())));
+    ui.set_import_summary(SharedString::from(format!(
+        "Cannot import this file.\n\n{message}"
+    )));
+    ui.set_import_review_items(ModelRc::new(VecModel::from(
+        Vec::<ImportReviewListItem>::new(),
+    )));
+    ui.set_import_result_items(ModelRc::new(VecModel::from(
+        Vec::<ImportResultListItem>::new(),
+    )));
     ui.set_import_can_continue(false);
 }
 
@@ -997,7 +1022,9 @@ fn render_import_result(
         skipped_rows.len(),
         failed_rows.len()
     )));
-    ui.set_import_review_items(ModelRc::new(VecModel::from(Vec::<ImportReviewListItem>::new())));
+    ui.set_import_review_items(ModelRc::new(VecModel::from(
+        Vec::<ImportReviewListItem>::new(),
+    )));
     ui.set_import_result_items(ModelRc::new(VecModel::from(rows)));
     ui.set_import_can_continue(false);
 }
@@ -1015,7 +1042,11 @@ fn note_type_index(note: &SecureNote) -> i32 {
 
 fn import_preview_text(preview: &BitwardenImportPreview) -> String {
     let mut lines = vec![
-        format!("{} item{} found.", preview.total_items, plural(preview.total_items)),
+        format!(
+            "{} item{} found.",
+            preview.total_items,
+            plural(preview.total_items)
+        ),
         format!(
             "{} item{} can be imported.",
             preview.importable_items,
@@ -1056,7 +1087,11 @@ fn import_preview_text(preview: &BitwardenImportPreview) -> String {
 }
 
 fn plural(count: usize) -> &'static str {
-    if count == 1 { "" } else { "s" }
+    if count == 1 {
+        ""
+    } else {
+        "s"
+    }
 }
 
 fn model_for_ids(vault: &NotesVault, ids: &[u64]) -> ModelRc<NoteListItem> {
@@ -1183,7 +1218,11 @@ fn sort_ids(vault: &NotesVault, ids: &mut [u64], sort_order: &str) {
             "Folder" => left_note
                 .map(|note| note.folder.to_ascii_lowercase())
                 .unwrap_or_default()
-                .cmp(&right_note.map(|note| note.folder.to_ascii_lowercase()).unwrap_or_default())
+                .cmp(
+                    &right_note
+                        .map(|note| note.folder.to_ascii_lowercase())
+                        .unwrap_or_default(),
+                )
                 .then_with(|| title_key(left_note).cmp(&title_key(right_note))),
             "Favorites First" => right_note
                 .map(|note| note.favorite)
@@ -1262,17 +1301,18 @@ fn validate_edit_form(
 ) -> bool {
     let mut valid = true;
     let title = title.trim();
-    let label_error = if title.is_empty() {
-        valid = false;
-        "Missing field, please add a Label"
-    } else if vault.notes.iter().any(|note| {
-        Some(note.id) != selected_id && note.title.trim().eq_ignore_ascii_case(title)
-    }) {
-        valid = false;
-        "Label is already in use"
-    } else {
-        ""
-    };
+    let label_error =
+        if title.is_empty() {
+            valid = false;
+            "Missing field, please add a Label"
+        } else if vault.notes.iter().any(|note| {
+            Some(note.id) != selected_id && note.title.trim().eq_ignore_ascii_case(title)
+        }) {
+            valid = false;
+            "Label is already in use"
+        } else {
+            ""
+        };
 
     let secret_label = match item_type {
         "Login" => "Password",

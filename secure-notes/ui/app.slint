@@ -1,9 +1,8 @@
-import { Theme, ButtonStyleProps, ButtonSizeProps, ButtonVariant, ButtonState, ButtonSize } from "@ui/theme.slint";
-import { UISize } from "@ui/theme.slint";
+import { Images, Theme, UISize } from "@ui/theme.slint";
 import { Button } from "@ui/button.slint";
 import { Dropdown } from "@ui/dropdown.slint";
 
-export { Theme, ButtonStyleProps, ButtonSizeProps, ButtonVariant, ButtonState, ButtonSize }
+export { Images, Theme }
 
 export struct NoteListItem {
     id: int,
@@ -449,50 +448,6 @@ component SearchInput inherits Rectangle {
     }
 }
 
-component FilterGlyph inherits Rectangle {
-    in property <brush> icon-color: Theme.palette-foreground;
-
-    width: 26px;
-    height: 26px;
-    background: transparent;
-
-    Rectangle {
-        x: 2px;
-        y: 6px;
-        width: 22px;
-        height: 2px;
-        border-radius: 1px;
-        background: root.icon-color;
-    }
-
-    Rectangle {
-        x: 2px;
-        y: 18px;
-        width: 22px;
-        height: 2px;
-        border-radius: 1px;
-        background: root.icon-color;
-    }
-
-    Rectangle {
-        x: 8px;
-        y: 2px;
-        width: 5px;
-        height: 10px;
-        border-radius: 2px;
-        background: root.icon-color;
-    }
-
-    Rectangle {
-        x: 15px;
-        y: 14px;
-        width: 5px;
-        height: 10px;
-        border-radius: 2px;
-        background: root.icon-color;
-    }
-}
-
 component FilterButton inherits Rectangle {
     in property <bool> active;
     in property <bool> open: false;
@@ -574,81 +529,6 @@ component SelectButton inherits Rectangle {
         clicked => {
             root.clicked();
         }
-    }
-}
-
-component LockGlyph inherits Rectangle {
-    in property <brush> icon-color: Theme.palette-muted;
-
-    width: 22px;
-    height: 22px;
-    background: transparent;
-
-    Rectangle {
-        x: 5px;
-        y: 9px;
-        width: 12px;
-        height: 10px;
-        border-radius: 2px;
-        border-width: 2px;
-        border-color: root.icon-color;
-        background: transparent;
-    }
-
-    Rectangle {
-        x: 7px;
-        y: 4px;
-        width: 8px;
-        height: 9px;
-        border-radius: 4px;
-        border-width: 2px;
-        border-color: root.icon-color;
-        background: transparent;
-    }
-
-    Rectangle {
-        x: 5px;
-        y: 11px;
-        width: 12px;
-        height: 3px;
-        background: Theme.palette-surface;
-    }
-}
-
-component DocumentGlyph inherits Rectangle {
-    in property <brush> icon-color: white;
-
-    width: 26px;
-    height: 26px;
-    background: transparent;
-
-    Rectangle {
-        x: 5px;
-        y: 3px;
-        width: 16px;
-        height: 20px;
-        border-radius: 3px;
-        border-width: 2px;
-        border-color: root.icon-color;
-        background: transparent;
-    }
-
-    Rectangle {
-        x: 9px;
-        y: 9px;
-        width: 8px;
-        height: 2px;
-        border-radius: 1px;
-        background: root.icon-color;
-    }
-
-    Rectangle {
-        x: 9px;
-        y: 15px;
-        width: 8px;
-        height: 2px;
-        border-radius: 1px;
-        background: root.icon-color;
     }
 }
 
@@ -864,47 +744,6 @@ component ErrorText inherits Text {
     font-weight: 500;
     vertical-alignment: center;
     wrap: word-wrap;
-}
-
-component OldStarButton inherits Rectangle {
-    in-out property <bool> active;
-
-    width: 52px;
-    height: 52px;
-    border-radius: 26px;
-    background: transparent;
-
-    Text {
-        width: 100%;
-        height: 100%;
-        text: root.active ? "★" : "☆";
-        color: root.active ? Theme.palette-primary : Theme.palette-foreground;
-        font-family: "Montserrat";
-        font-size: 34px;
-        font-weight: 700;
-        horizontal-alignment: center;
-        vertical-alignment: center;
-    }
-
-}
-
-component StarButton inherits Rectangle {
-    in-out property <bool> active;
-
-    width: 52px;
-    height: 52px;
-    border-radius: 26px;
-    background: transparent;
-
-    Image {
-        x: (parent.width - self.width) / 2;
-        y: (parent.height - self.height) / 2;
-        width: 22px;
-        height: 22px;
-        source: root.active ? @image-url("../resources/icons/favorite-star-filled.svg") : @image-url("../resources/icons/favorite-star-outline.svg");
-        colorize: root.active ? Theme.palette-primary : Theme.palette-foreground;
-        image-fit: contain;
-    }
 }
 
 component CustomFieldRow inherits Rectangle {
